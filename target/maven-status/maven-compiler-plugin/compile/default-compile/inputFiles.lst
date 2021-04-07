@@ -1,5 +1,10 @@
+/var/www/html/cvven-java/src/main/java/modele/EventManagement.java
 /var/www/html/cvven-java/src/main/java/vue/Home.java
 /var/www/html/cvven-java/src/main/java/vue/AddParticipant.java
 /var/www/html/cvven-java/src/main/java/vue/AddEvent.java
 /var/www/html/cvven-java/src/main/java/vue/Connection.java
+/var/www/html/cvven-java/src/main/java/com/mycompany/cvven/java/CvvenJava.java
+/var/www/html/cvven-java/src/main/java/modele/DialogTools.java
 /var/www/html/cvven-java/src/main/java/vue/Events.java
+/var/www/html/cvven-java/src/main/java/modele/ConnectBDD.java
+/var/www/html/cvven-java/src/main/java/modele/Session.java

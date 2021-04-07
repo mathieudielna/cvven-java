@@ -5,6 +5,14 @@
  */
 package vue;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import modele.DialogTools;
+import modele.EventManagement;
+import modele.Session;
+
 /**
  *
  * @author senpai
@@ -17,7 +25,52 @@ public class AddEvent extends javax.swing.JFrame {
     public AddEvent() {
         initComponents();
     }
+    
+      
+    private void setDefaultValue(){
+        entitledEvent.setText(null);
+        themeEvent.setText(null);
+        dateEvent.setDate(null);
+        durationEvent.setValue(15);
+        organisateurEvent.setText(null);
+        roomSelectEvent.setSelectedIndex(0);
+        typeEvent.setSelectedIndex(0);
+        descriptionEvent.setText(null);
+        nbCharDescEvent.setText("0/255");
+    }
 
+    
+        public final boolean setValueEvent(){
+        try {
+            EventManagement EventManagement = new EventManagement();
+            EventManagement.setDb();
+            ResultSet result = EventManagement.selectAllRoom();
+            
+            if(result != null){
+                boolean isExist = false;
+                do{
+                    String salle = "N°" + result.getString("id_room") + " Salle de " + result.getString("roomtype") + "("+result.getString("capacity") + ")";
+                    for(int i = 0; i < this.roomSelectEvent.getItemCount(); i++){
+                        if(this.roomSelectEvent.getItemAt(i).equalsIgnoreCase(salle)){
+                            isExist = true;
+                        }
+                    }
+                    if(!isExist){
+                        this.roomSelectEvent.addItem(salle);
+                    }
+                    isExist = false;
+                }while(result.next());
+            
+                EventManagement.closeAll();
+                return true;
+            }else{
+                throw new SQLException("Aucune salle n'as été trouvée ! Veillez contactez l'administrateur.");
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            DialogTools.openMessageDialog(ex.getMessage(), "Erreur", DialogTools.ERROR_MESSAGE);
+            return false;
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,6 +80,27 @@ public class AddEvent extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        dateEvent = new com.toedter.calendar.JDateChooser();
+        durationEvent = new javax.swing.JSpinner();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        descriptionEvent = new javax.swing.JTextArea();
+        organisateurEvent = new javax.swing.JTextField();
+        typeEvent = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        cancelEvent = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        roomSelectEvent = new javax.swing.JComboBox<>();
+        addEvent = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        nbCharDescEvent = new javax.swing.JLabel();
+        themeEvent = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        entitledEvent = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         navBar = new javax.swing.JMenuBar();
         accueilNav = new javax.swing.JMenu();
         inputEventNav = new javax.swing.JMenu();
@@ -35,6 +109,104 @@ public class AddEvent extends javax.swing.JFrame {
         deconnexionNav = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        dateEvent.setDateFormatString("yyyy-MM-dd");
+        dateEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+
+        durationEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        durationEvent.setModel(new javax.swing.SpinnerNumberModel(15, 15, 240, 1));
+
+        descriptionEvent.setColumns(20);
+        descriptionEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        descriptionEvent.setRows(5);
+        descriptionEvent.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                descriptionEventKeyTyped(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                descriptionEventKeyReleased(evt);
+            }
+        });
+        jScrollPane2.setViewportView(descriptionEvent);
+
+        organisateurEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+
+        typeEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        typeEvent.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Veuillez choisir une option", "colloques", "séminaires", "congrès" }));
+        typeEvent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                typeEventActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jLabel7.setText("Organisateur");
+
+        cancelEvent.setBackground(new java.awt.Color(151, 21, 40));
+        cancelEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        cancelEvent.setForeground(new java.awt.Color(1, 1, 1));
+        cancelEvent.setText("Annuler");
+        cancelEvent.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cancelEventMouseClicked(evt);
+            }
+        });
+
+        jLabel8.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jLabel8.setText("Choix de la salle");
+
+        roomSelectEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        roomSelectEvent.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Veuillez choisir une option" }));
+
+        addEvent.setBackground(new java.awt.Color(34, 139, 34));
+        addEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        addEvent.setForeground(new java.awt.Color(1, 1, 1));
+        addEvent.setText("Créer");
+        addEvent.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addEventMouseClicked(evt);
+            }
+        });
+        addEvent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addEventActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jLabel10.setText("Type évènement");
+
+        jLabel9.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jLabel9.setText("Description de l'évènement");
+
+        nbCharDescEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        nbCharDescEvent.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        nbCharDescEvent.setText("0/255");
+
+        themeEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+
+        jLabel1.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jLabel1.setText("Intitulé de l'évènement");
+
+        jLabel5.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Add event ");
+
+        jLabel2.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jLabel2.setText("Thème de l'évènement");
+
+        entitledEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        entitledEvent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                entitledEventActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jLabel3.setText("Date de l'événement");
+
+        jLabel4.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jLabel4.setText("Durée de l'événement");
 
         navBar.setBackground(new java.awt.Color(204, 204, 204));
         navBar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -91,24 +263,108 @@ public class AddEvent extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 427, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(entitledEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(themeEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(32, 32, 32)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(addEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(57, 57, 57)
+                                            .addComponent(cancelEvent, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE))
+                                        .addComponent(organisateurEvent)
+                                        .addComponent(durationEvent)
+                                        .addComponent(dateEvent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jLabel4)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(nbCharDescEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jLabel10)
+                                                .addComponent(typeEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGap(49, 49, 49)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(roomSelectEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel8)))
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 21, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 291, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(entitledEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(themeEvent, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(dateEvent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                .addGap(3, 3, 3)
+                .addComponent(durationEvent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(organisateurEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(roomSelectEvent)
+                    .addComponent(typeEvent))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(nbCharDescEvent, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cancelEvent, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(addEvent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(25, 25, 25))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void accueilNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accueilNavMouseClicked
-        Accueil fen = new Accueil();
+        Home fen = new Home();
         fen.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_accueilNavMouseClicked
 
     private void inputEventNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputEventNavMouseClicked
-        AjoutEvenement fen = new AjoutEvenement();
+        AddEvent fen = new AddEvent();
         if(fen.setValueEvent()){
             fen.setVisible(true);
             this.dispose();
@@ -118,7 +374,7 @@ public class AddEvent extends javax.swing.JFrame {
     }//GEN-LAST:event_inputEventNavMouseClicked
 
     private void inputParticipantNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputParticipantNavMouseClicked
-        AjoutParticipant fen = new AjoutParticipant();
+        AddParticipant fen = new AddParticipant();
         if(fen.setValueParticipant()){
             fen.setVisible(true);
             this.dispose();
@@ -128,17 +384,83 @@ public class AddEvent extends javax.swing.JFrame {
     }//GEN-LAST:event_inputParticipantNavMouseClicked
 
     private void DisplayEventNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DisplayEventNavMouseClicked
-        AfficherEvenements fen = new AfficherEvenements();
+        Events fen = new Events();
         fen.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_DisplayEventNavMouseClicked
 
     private void deconnexionNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deconnexionNavMouseClicked
-        Authentification fen = new Authentification();
+        Connection fen = new Connection();
         fen.setVisible(true);
         Session.destructSession();
         this.dispose();
     }//GEN-LAST:event_deconnexionNavMouseClicked
+
+    private void descriptionEventKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_descriptionEventKeyTyped
+        nbCharDescEvent.setText(descriptionEvent.getText().length() + "/255");
+    }//GEN-LAST:event_descriptionEventKeyTyped
+
+    private void descriptionEventKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_descriptionEventKeyReleased
+        nbCharDescEvent.setText(descriptionEvent.getText().length() + "/255");
+    }//GEN-LAST:event_descriptionEventKeyReleased
+
+    private void cancelEventMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelEventMouseClicked
+        Home fen = new Home();
+        fen.setVisible(true);
+        this.setDefaultValue();
+        this.dispose();
+    }//GEN-LAST:event_cancelEventMouseClicked
+
+    private void addEventMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addEventMouseClicked
+        if(entitledEvent.getText().isBlank()){
+            DialogTools.openMessageDialog("Veuillez indiquez l'intitule de l'évènement", "Erreur", DialogTools.ERROR_MESSAGE);
+        }else if(themeEvent.getText().isBlank()){
+            DialogTools.openMessageDialog("Veuillez indiquez le thème de l'évènement", "Erreur", DialogTools.ERROR_MESSAGE);
+        }else if(dateEvent.getDate() == null || dateEvent.getDate().before(new Date())){
+            if(dateEvent.getDate()== null){
+                DialogTools.openMessageDialog("Veuillez indiquez la date de l'évènement", "Erreur", DialogTools.ERROR_MESSAGE);
+            }else if(dateEvent.getDate().before(new Date())){
+                DialogTools.openMessageDialog("La date de l'évènement doit se dérouler après la date actuelle", "Erreur", DialogTools.ERROR_MESSAGE);
+            }
+        }else if(organisateurEvent.getText().isBlank()){
+            DialogTools.openMessageDialog("Veuillez indiquez l'organisateur de l'évènement", "Erreur", DialogTools.ERROR_MESSAGE);
+        }else if(typeEvent.getItemAt(typeEvent.getSelectedIndex()).equalsIgnoreCase("Veuillez choisir une option")){
+            DialogTools.openMessageDialog("Veuillez choisir un évènement", "Erreur", DialogTools.ERROR_MESSAGE);
+        }else if(roomSelectEvent.getItemAt(roomSelectEvent.getSelectedIndex()).equalsIgnoreCase("Veuillez choisir une option")){
+            DialogTools.openMessageDialog("Veuillez choisir une salle", "Erreur", DialogTools.ERROR_MESSAGE);
+        }else if(descriptionEvent.getText().isBlank() || descriptionEvent.getText().length() > 255){
+            if(descriptionEvent.getText().isBlank()){
+                DialogTools.openMessageDialog("Veuillez indiquez une description à l'évènement", "Erreur", DialogTools.ERROR_MESSAGE);
+            }else{
+                DialogTools.openMessageDialog("Veuillez ne pas dépassez les 255 caractères", "Erreur", DialogTools.ERROR_MESSAGE);
+            }
+        }else{
+            try {
+                EventManagement EventManagement = new EventManagement();
+                EventManagement.setDb();
+                SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+                EventManagement.insertEvent(entitledEvent.getText(), themeEvent.getText(), formatDate.format(dateEvent.getDate()), ((Integer)durationEvent.getValue()),
+                    descriptionEvent.getText(), organisateurEvent.getText(), typeEvent.getItemAt(typeEvent.getSelectedIndex()), roomSelectEvent.getItemAt(roomSelectEvent.getSelectedIndex()));
+                EventManagement.closeAll();
+                DialogTools.openMessageDialog("Insertion de l'évènement terminée !","Insertion Terminée");
+                this.setDefaultValue();
+            } catch (SQLException | ClassNotFoundException ex) {
+                DialogTools.openMessageDialog(ex.getMessage(), "Erreur", DialogTools.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_addEventMouseClicked
+
+    private void typeEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeEventActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_typeEventActionPerformed
+
+    private void addEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEventActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addEventActionPerformed
+
+    private void entitledEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entitledEventActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_entitledEventActionPerformed
 
     /**
      * @param args the command line arguments
@@ -178,9 +500,32 @@ public class AddEvent extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu DisplayEventNav;
     private javax.swing.JMenu accueilNav;
+    private javax.swing.JButton addEvent;
+    private javax.swing.JButton cancelEvent;
+    private com.toedter.calendar.JDateChooser dateEvent;
     private javax.swing.JMenu deconnexionNav;
+    private javax.swing.JTextArea descriptionEvent;
+    private javax.swing.JSpinner durationEvent;
+    private javax.swing.JTextField entitledEvent;
     private javax.swing.JMenu inputEventNav;
     private javax.swing.JMenu inputParticipantNav;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JMenuBar navBar;
+    private javax.swing.JLabel nbCharDescEvent;
+    private javax.swing.JTextField organisateurEvent;
+    private javax.swing.JComboBox<String> roomSelectEvent;
+    private javax.swing.JTextField themeEvent;
+    private javax.swing.JComboBox<String> typeEvent;
     // End of variables declaration//GEN-END:variables
+
+
 }

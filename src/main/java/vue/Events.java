@@ -5,6 +5,8 @@
  */
 package vue;
 
+import modele.Session;
+
 /**
  *
  * @author senpai
@@ -63,7 +65,7 @@ public class Events extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
                 .addContainerGap())
             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
@@ -142,39 +144,39 @@ public class Events extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void accueilNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accueilNavMouseClicked
-        Accueil fen = new Accueil();
+        Home fen = new Home();
         fen.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_accueilNavMouseClicked
 
     private void inputEventNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputEventNavMouseClicked
-        AjoutEvenement fen = new AjoutEvenement();
-        if(fen.setValueEvent()){
+        AddEvent fen = new AddEvent();
+        //if(fen.setValueEvent()){
             fen.setVisible(true);
             this.dispose();
-        }else {
-            fen.dispose();
-        }
+        //}else {
+            //fen.dispose();
+        //}
     }//GEN-LAST:event_inputEventNavMouseClicked
 
     private void inputParticipantNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputParticipantNavMouseClicked
-        AjoutParticipant fen = new AjoutParticipant();
-        if(fen.setValueParticipant()){
+        AddParticipant fen = new AddParticipant();
+        //if(fen.setValueParticipant()){
             fen.setVisible(true);
             this.dispose();
-        }else{
-            fen.dispose();
-        }
+        //}else{
+            //fen.dispose();
+        //}
     }//GEN-LAST:event_inputParticipantNavMouseClicked
 
     private void DisplayEventNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DisplayEventNavMouseClicked
-        AfficherEvenements fen = new AfficherEvenements();
+        Events fen = new Events();
         fen.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_DisplayEventNavMouseClicked
 
     private void deconnexionNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deconnexionNavMouseClicked
-        Authentification fen = new Authentification();
+        Connection fen = new Connection();
         fen.setVisible(true);
         Session.destructSession();
         this.dispose();
@@ -219,8 +221,6 @@ public class Events extends javax.swing.JFrame {
     private javax.swing.JMenu DisplayEventNav;
     private javax.swing.JMenu accueilNav;
     private javax.swing.JMenu deconnexionNav;
-    private javax.swing.JPanel footer3;
-    private javax.swing.JPanel footer4;
     private javax.swing.JMenu inputEventNav;
     private javax.swing.JMenu inputParticipantNav;
     private javax.swing.JLabel jLabel1;
