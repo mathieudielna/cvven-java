@@ -5,6 +5,7 @@
  */
 package vue;
 
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -120,11 +121,11 @@ public class AddEvent extends javax.swing.JFrame {
         descriptionEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
         descriptionEvent.setRows(5);
         descriptionEvent.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                descriptionEventKeyTyped(evt);
-            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 descriptionEventKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                descriptionEventKeyTyped(evt);
             }
         });
         jScrollPane2.setViewportView(descriptionEvent);
@@ -439,8 +440,10 @@ public class AddEvent extends javax.swing.JFrame {
                 EventManagement EventManagement = new EventManagement();
                 EventManagement.setDb();
                 SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
-                EventManagement.insertEvent(entitledEvent.getText(), themeEvent.getText(), formatDate.format(dateEvent.getDate()), ((Integer)durationEvent.getValue()),
-                    descriptionEvent.getText(), organisateurEvent.getText(), typeEvent.getItemAt(typeEvent.getSelectedIndex()), roomSelectEvent.getItemAt(roomSelectEvent.getSelectedIndex()));
+                EventManagement.insertEvent(entitledEvent.getText(), themeEvent.getText(), formatDate.format(dateEvent.getDate()), 
+                        ((Integer)durationEvent.getValue()), descriptionEvent.getText(), 
+                        organisateurEvent.getText(), 
+                        typeEvent.getItemAt(typeEvent.getSelectedIndex()), roomSelectEvent.getItemAt(roomSelectEvent.getSelectedIndex()));
                 EventManagement.closeAll();
                 DialogTools.openMessageDialog("Insertion de l'évènement terminée !","Insertion Terminée");
                 this.setDefaultValue();

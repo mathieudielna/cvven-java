@@ -37,7 +37,7 @@ public final class EventManagement extends ConnectBDD {
     /**
      * Selectionne les informations nécessaire pour l'affichage des évènement ayant au moins une participation.
      * Les informations retournés sont : 
-     * -l'intitule
+     * -l'entitled
      * -le type
      * -la date de l'évènement
      * -le thème
@@ -49,25 +49,25 @@ public final class EventManagement extends ConnectBDD {
      * @throws SQLException 
      */
     public ResultSet selectInfoTableEventWithParticipation() throws SQLException{
-        super.setMyStatement("SELECT evenement.intitule, evenement.type, evenement.date, evenement.duree, evenement.theme, "
-                + "COUNT(particper.id_participant) AS nbParticipant, evenement.organisateur, evenement.archive "
-                + "FROM public.participer INNER JOIN public.evenement ON participer.id_evenement = evenement.id_evenement "
+        super.setMyStatement("SELECT event.entitled, event.type, event.date, event.duration, event.theme, "
+                + "COUNT(particper.id_participant) AS nbParticipant, event.organisateur, event.archive "
+                + "FROM public.participer INNER JOIN public.event ON participer.id_event = event.id_event "
                 + "INNER JOIN public.participant ON participer.id_participant = participant.id_participant"
-                + "GROUP BY evenement.intitule, evenement.type, evenement.datedebut, evenement.duree, evenement.theme, evenement.organisateur, evenement.archive"
-                + "ORDER BY evenement.archive DESC;");
+                + "GROUP BY event.entitled, event.type, event.datedebut, event.duration, event.theme, event.organisateur, event.archive"
+                + "ORDER BY event.archive DESC;");
         return super.getResult();
     }
     
      /**
      * Inscrit un participant à un évènement
      * 
-     * @param intitule
+     * @param entitled
      * @param email
      * @throws SQLException 
      */
-    public void insertParticipation(String intitule, String email) throws SQLException{
-        int idEvent = Integer.parseInt(String.valueOf(intitule.substring(2, 3)));
-        super.setMyStatement("INSERT INTO public.participer(id_evenement, id_participant) VALUES(?, (SELECT id_participant FROM public.participant WHERE email = ?));");
+    public void insertParticipation(String entitled, String email) throws SQLException{
+        int idEvent = Integer.parseInt(String.valueOf(entitled.substring(2, 3)));
+        super.setMyStatement("INSERT INTO public.takepart(id_event, id_participant) VALUES(?, (SELECT id_participant FROM public.participant WHERE email = ?));");
         super.getMyStatement().setInt(1, idEvent);
         super.getMyStatement().setString(2, email);
         super.execSQLWithouthResult();
@@ -107,7 +107,7 @@ public final class EventManagement extends ConnectBDD {
     /**
      * Retourne les informations de l'évènement à partir de l'intitulé.
      * Les informations retournés sont : 
-     * -l'intitule
+     * -l'entitled
      * -le type
      * -la date de l'évènement
      * -le thème
@@ -117,19 +117,19 @@ public final class EventManagement extends ConnectBDD {
      * -L'id de l'utilisateur
      * -L'id de la salle
      * 
-     * @param intitule
+     * @param entitled
      * @return
      * @throws SQLException 
      */
-    public ResultSet selectInfoEventWithIntitule(String intitule) throws SQLException{
-        super.setMyStatement("SELECT evenement.intitule, evenement.theme, evenemenent.dateEvent, evenement.duree, evenement.description, evenement.organisateur, evenement.type,"
-                + "evenement.archive, evenement.id_user, evenement.idSalle FROM public.evenement WHERE evenement.intitule = ?");
-        super.getMyStatement().setString(1, intitule);
+    public ResultSet selectInfoEventWithentitled(String entitled) throws SQLException{
+        super.setMyStatement("SELECT event.entitled, event.theme, evenemenent.dateEvent, event.duration, event.decription, event.organisateur, event.type,"
+                + "event.archive, event.id_user, event.idSalle FROM public.event WHERE event.entitled = ?");
+        super.getMyStatement().setString(1, entitled);
         return super.getResult();
     }
     
     /**
-     * Selectionne les évènement non archivé existant avec uniquement l'id et l'intitule.
+     * Selectionne les évènement non archivé existant avec uniquement l'id et l'entitled.
      * Les informations retournés sont :
      * -L'id de l'évènement
      * -L'intitulé de lévènement
@@ -138,20 +138,20 @@ public final class EventManagement extends ConnectBDD {
      * @throws SQLException 
      */
     public ResultSet selectLesEventNonArchiver() throws SQLException{
-        super.setMyStatement("SELECT evenement.id_evenement, evenement.intitule FROM public.evenement WHERE evenement.archive IS NULL;");
+        super.setMyStatement("SELECT event.id_event, event.entitled FROM public.event WHERE event.archive IS NULL;");
         return super.getResult();
     }
     
     /**
      * Compte le nombre d'évènement avec l'intitulé de l'évènement.
      * 
-     * @param intitule
+     * @param entitled
      * @return le résultat de la requête
      * @throws SQLException 
      */
-    public ResultSet countEventWithIntitule(String intitule) throws SQLException{
-        super.setMyStatement("SELECT COUNT(intitule) AS nbEvent FROM evenement WHERE intitule = ?;");
-        super.getMyStatement().setString(1, intitule);
+    public ResultSet countEventWithentitled(String entitled) throws SQLException{
+        super.setMyStatement("SELECT COUNT(entitled) AS nbEvent FROM event WHERE entitled = ?;");
+        super.getMyStatement().setString(1, entitled);
         return super.getResult();
     }
     
@@ -161,31 +161,31 @@ public final class EventManagement extends ConnectBDD {
      * 
      * Un trigger vérifie si l'intitulé de l'évènement n'existe pas déja.
      * 
-     * @param intitule Intitulé de l'évènement
+     * @param entitled Intitulé de l'évènement
      * @param theme Theme de l'évènement
      * @param dateEvent Date à laquelle se déroule l'évènement
-     * @param duree Durée de l'évènement
-     * @param description Description de l'évènement
+     * @param duration Durée de l'évènement
+     * @param decription decription de l'évènement
      * @param organisateur Organisateur de l'évènement
      * @param typeEvent Type de l'évènement
-     * @param salleChoisi La salle choisis par l'utilisateur le champs est sous format : 'N°' + id_salle + ' Salle de ' + typesalle + '(' + capacite + 'personne)'
+     * @param roomChoice La salle choisis par l'utilisateur le champs est sous format : 'N°' + id_room + ' Salle de ' + typesalle + '(' + capacite + 'personne)'
      * @throws SQLException 
      * 
      */
-    public void insertEvent(String intitule, String theme, String dateEvent, int duree, String description, 
-            String organisateur, String typeEvent, String salleChoisi) throws SQLException{
+    public void insertEvent(String entitled, String theme, String dateEvent, int duration, String decription, 
+            String organisateur, String typeEvent, String roomChoice) throws SQLException{
         
-            super.setMyStatement("INSERT INTO evenement(intitule, theme, date, duree, nb_participant_max, description, organisateur, type, id_user ,id_salle)"
-                    + " VALUES(?, ?, ?, ?, (SELECT salle.capacite FROM public.salle WHERE salle.id_salle = ?), ?, ?, ?, ?, ?);");
+            super.setMyStatement("INSERT INTO event(entitled, theme, date, duration, participantmax , decription, organisateur, type, id_user ,id_room)"
+                    + " VALUES(?, ?, ?, ?, (SELECT room.capacity FROM public.room WHERE room.id_room = ?), ?, ?, ?, ?, ?);");
         
-            int idSalle = Integer.parseInt(String.valueOf(salleChoisi.charAt(2)));
+            int idSalle = Integer.parseInt(String.valueOf(roomChoice.charAt(2)));
             //Définitions des paramètres
-            super.getMyStatement().setString(1, intitule);
+            super.getMyStatement().setString(1, entitled);
             super.getMyStatement().setString(2, theme);
             super.getMyStatement().setObject(3, dateEvent, Types.DATE);
-            super.getMyStatement().setInt(4, duree);
+            super.getMyStatement().setInt(4, duration);
             super.getMyStatement().setInt(5, idSalle);
-            super.getMyStatement().setString(6, description);
+            super.getMyStatement().setString(6, decription);
             super.getMyStatement().setString(7, organisateur);
             super.getMyStatement().setString(8, typeEvent);
             super.getMyStatement().setInt(9, Session.getIdUser());
