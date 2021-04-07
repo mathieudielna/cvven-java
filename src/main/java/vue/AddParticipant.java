@@ -8,7 +8,7 @@ package vue;
 import javax.swing.DefaultListModel;
 import modele.DialogTools;
 import modele.Session;
-//import modele.CSVFileRead;
+import modele.CSVFileRead;
 import modele.EventManagement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,12 +39,12 @@ public class AddParticipant extends javax.swing.JFrame {
     public void setDefaultValue() {
         selectEvents.setModel(new DefaultListModel());
         ((DefaultListModel) selectEvents.getModel()).addElement("Aucun évènement !");
-        nom.setText(null);
-        prenom.setText(null);
+        lastName.setText(null);
+        firstName.setText(null);
         email.setText(null);
-        birthDay.setDate(null);
-        organization.setText(null);
-        observation.setText(null);
+        birth.setDate(null);
+        org.setText(null);
+        obs.setText(null);
         countChar.setText("0/255");
     }
 
@@ -58,16 +58,16 @@ public class AddParticipant extends javax.swing.JFrame {
      */
     public final boolean setValueParticipant() {
         try {
-            EventManagement em = new EventManagement();
-            em.setDb();
-            ResultSet result = em.selectLesEventNonArchiver();
+            EventManagement EventManagement = new EventManagement();
+            EventManagement.setDb();
+            ResultSet result = EventManagement.selectLesEventNonArchiver();
             this.setDefaultValue();
 
             if (result != null) {
                 boolean isExist = false;
                 ((DefaultListModel) selectEvents.getModel()).remove(0);
                 do {
-                    String event = "N°" + result.getString("id_evenement") + " Intitulé : " + result.getString("intitule");
+                    String event = "N°" + result.getString("id_event") + " Intitulé : " + result.getString("entitled");
                     for (int i = 0; i < selectEvents.getModel().getSize(); i++) {
                         if (selectEvents.getModel().getElementAt(i).equalsIgnoreCase(event)) {
                             isExist = true;
@@ -78,7 +78,7 @@ public class AddParticipant extends javax.swing.JFrame {
                     }
                     isExist = false;
                 } while (result.next());
-                em.closeAll();
+                EventManagement.closeAll();
                 return true;
             } else {
                 DialogTools.openMessageDialog("Aucun évènement n'a été inséré !", "Avertissement !", DialogTools.WARNING_MESSAGE);
@@ -96,15 +96,20 @@ public class AddParticipant extends javax.swing.JFrame {
      * @param visible
      */
     private void showField(boolean visible) {
-        libelleNom.setVisible(visible);
-        nom.setVisible(visible);
-        prenom.setVisible(visible);
+        firstNameL.setVisible(visible);
+        firstName.setVisible(visible);
+        lastNameL.setVisible(visible);
+        lastName.setVisible(visible);
+        emailL.setVisible(visible);
         email.setVisible(visible);
-        birthDay.setVisible(visible);
-        organization.setVisible(visible);
-        observation.setVisible(visible);
+        birthL.setVisible(visible);
+        birth.setVisible(visible);
+        orgL.setVisible(visible);
+        org.setVisible(visible);
+        obsL.setVisible(visible);
+        obs.setVisible(visible);
         jScrollPane2.setVisible(visible);
-        observation.setVisible(visible);
+        obs.setVisible(visible);
         countChar.setVisible(visible);
     }
 
@@ -131,22 +136,22 @@ public class AddParticipant extends javax.swing.JFrame {
             if (selectEvents.getSelectedValuesList().isEmpty()) {
                 DialogTools.openMessageDialog("Vous n'avez pas sélectionner d'évènement !", "Erreur", DialogTools.ERROR_MESSAGE);
             }
-        } else if (nomParticipant.getText().isBlank()) {
+        } else if (lastName.getText().isBlank()) {
             DialogTools.openMessageDialog("Veuillez entrez un nom !", "Erreur", DialogTools.ERROR_MESSAGE);
-        } else if (prenomParticipant.getText().isBlank()) {
+        } else if (firstName.getText().isBlank()) {
             DialogTools.openMessageDialog("Veuillez entrez un prénom !", "Erreur", DialogTools.ERROR_MESSAGE);
-        } else if (adresseMailParticipant.getText().isBlank() || !EmailValidator.getInstance().isValid(adresseMailParticipant.getText())) {
+        } else if (email.getText().isBlank() || !EmailValidator.getInstance().isValid(email.getText())) {
             DialogTools.openMessageDialog("Veuillez entrez une adresse mail valide !", "Erreur", DialogTools.ERROR_MESSAGE);
-        } else if (birthDay.getDate() == null || birthDay.getDate().after(new Date())) {
-            if (birthDay.getDate() == null) {
+        } else if (birth.getDate() == null || birth.getDate().after(new Date())) {
+            if (birth.getDate() == null) {
                 DialogTools.openMessageDialog("Veuillez entrez une date de naissance !", "Erreur", DialogTools.ERROR_MESSAGE);
-            } else if (birthDay.getDate().after(new Date())) {
+            } else if (birth.getDate().after(new Date())) {
                 DialogTools.openMessageDialog("La date de naissance ne peut pas être après la date actuelle", "Erreur", DialogTools.ERROR_MESSAGE);
             }
-        } else if (organisationParticipant.getText().isBlank()) {
+        } else if (org.getText().isBlank()) {
             DialogTools.openMessageDialog("Veuillez entrez l'organisation du participant !", "Erreur", DialogTools.ERROR_MESSAGE);
-        } else if (observationsParticipant.getText().isBlank() || observationsParticipant.getText().length() > 255) {
-            if (observationsParticipant.getText().isBlank()) {
+        } else if (org.getText().isBlank() || org.getText().length() > 255) {
+            if (org.getText().isBlank()) {
                 DialogTools.openMessageDialog("Veuillez indiquez une observation", "Erreur", DialogTools.ERROR_MESSAGE);
             } else {
                 DialogTools.openMessageDialog("Veuillez ne pas dépassez les 255 caractères", "Erreur", DialogTools.ERROR_MESSAGE);
@@ -166,13 +171,13 @@ public class AddParticipant extends javax.swing.JFrame {
                     SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
 
                     em.setDb();
-                    em.insertParticipant(nomParticipant.getText(), prenomParticipant.getText(), adresseMailParticipant.getText(),
-                            formatDate.format(birthDay.getDate()), organisationParticipant.getText(), observationsParticipant.getText());
+                    em.insertParticipant(lastName.getText(), firstName.getText(), email.getText(),
+                            formatDate.format(birth.getDate()), org.getText(), obs.getText());
                     em.closeMyStatement();
 
                     for (String selectEvent : selectEvents.getSelectedValuesList()) {
                         if (!selectEvent.equalsIgnoreCase("Aucun évènement !")) {
-                            em.insertParticipation(selectEvent, adresseMailParticipant.getText());
+                            em.insertParticipation(selectEvent, email.getText());
                         }
                     }
 
@@ -186,57 +191,6 @@ public class AddParticipant extends javax.swing.JFrame {
         }
     }
 
-    public void insertParticipantCSV() {
-        if (selectEvents.getSelectedValuesList().isEmpty()) {
-            if (selectEvents.getSelectedValuesList().isEmpty()) {
-                DialogTools.openMessageDialog("Vous n'avez pas sélectionner d'évènement !", "Erreur", DialogTools.ERROR_MESSAGE);
-            }
-        } else {
-            boolean isValid = true;
-            for (String selectEvent : selectEvents.getSelectedValuesList()) {
-                if (selectEvent.equalsIgnoreCase("Aucun évènement !")) {
-                    isValid = false;
-                }
-            }
-            if (!isValid) {
-                DialogTools.openMessageDialog("Le participant ne peut pas être inscrit à aucun évènement !", "Erreur !", DialogTools.ERROR_MESSAGE);
-            } else {
-                try {
-                    EventManagement em = new EventManagement();
-                    em.setDb();
-
-                    while (ChooseFileCSV.showOpenDialog(this) != JFileChooser.APPROVE_OPTION && ChooseFileCSV.showOpenDialog(this) != JFileChooser.CANCEL_OPTION) {
-                        if (ChooseFileCSV.showOpenDialog(this) != JFileChooser.ERROR_OPTION) {
-                            break;
-                        }
-                    }
-                    if (ChooseFileCSV.getSelectedFile() != null) {
-                        CSVFileRead csvFile = new CSVFileRead(ChooseFileCSV.getSelectedFile());
-                        if (csvFile.readControlFile() != null) {
-                            for (String[] uneLigne : csvFile.getLesLignes()) {
-                                em.insertParticipant(uneLigne[0], uneLigne[1], uneLigne[2], uneLigne[3], uneLigne[4], uneLigne[5]);
-                                em.closeMyStatement();
-
-                                for (String selectEvent : selectEvents.getSelectedValuesList()) {
-                                    if (!selectEvent.equalsIgnoreCase("Aucun évènement !")) {
-                                        em.insertParticipation(selectEvent, uneLigne[3]);
-                                        em.closeMyStatement();
-                                    }
-                                }
-                            }
-                            em.closeAll();
-                            DialogTools.openMessageDialog("L'ajout de participant est terminée !", "Ajout Terminée");
-                            this.setValueParticipant();
-                        } else {
-                            DialogTools.openMessageDialog("Vous n'avez pas sélectionné de fichier !", "Erreur Select Fichier !", DialogTools.WARNING_MESSAGE);
-                        }
-                    }
-                } catch (SQLException | ClassNotFoundException ex) {
-                    DialogTools.openMessageDialog(ex.getMessage(), "Erreur Participant !", DialogTools.ERROR_MESSAGE);
-                }
-            }
-        }
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -254,29 +208,29 @@ public class AddParticipant extends javax.swing.JFrame {
         DisplayEventNav = new javax.swing.JMenu();
         deconnexionNav = new javax.swing.JMenu();
         jPanel4 = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        insertEventText = new javax.swing.JRadioButton();
+        insertCSV = new javax.swing.JRadioButton();
         label1 = new java.awt.Label();
         jScrollPane1 = new javax.swing.JScrollPane();
         selectEvents = new javax.swing.JList<>();
-        prenom = new javax.swing.JTextField();
+        firstName = new javax.swing.JTextField();
         email = new javax.swing.JTextField();
-        nom = new javax.swing.JTextField();
-        organization = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        label2 = new java.awt.Label();
-        label3 = new java.awt.Label();
-        label4 = new java.awt.Label();
-        label5 = new java.awt.Label();
-        label6 = new java.awt.Label();
+        lastName = new javax.swing.JTextField();
+        org = new javax.swing.JTextField();
+        lastNameL = new javax.swing.JLabel();
+        emailL = new java.awt.Label();
+        orgL = new java.awt.Label();
+        firstNameL = new java.awt.Label();
+        birthL = new java.awt.Label();
+        obsL = new java.awt.Label();
         countChar = new java.awt.Label();
         jScrollPane2 = new javax.swing.JScrollPane();
-        observation = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        obs = new javax.swing.JTextArea();
+        add = new javax.swing.JButton();
+        cancel = new javax.swing.JButton();
         footer2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        birthDay = new com.toedter.calendar.JDateChooser();
+        selectEvent = new javax.swing.JLabel();
+        birth = new com.toedter.calendar.JDateChooser();
         navBar1 = new javax.swing.JMenuBar();
         accueilNav1 = new javax.swing.JMenu();
         inputEventNav1 = new javax.swing.JMenu();
@@ -337,64 +291,65 @@ public class AddParticipant extends javax.swing.JFrame {
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
-        jRadioButton1.setText("Form");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+        insertEventText.setText("Form");
+        insertEventText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
+                insertEventTextActionPerformed(evt);
             }
         });
 
-        jRadioButton2.setText("CSV file");
+        insertCSV.setText("CSV file");
 
         label1.setAlignment(java.awt.Label.CENTER);
-        label1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        label1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         label1.setText("Add participant");
 
+        selectEvents.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
         selectEvents.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { "No event now!" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
         jScrollPane1.setViewportView(selectEvents);
 
-        prenom.addActionListener(new java.awt.event.ActionListener() {
+        firstName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                prenomActionPerformed(evt);
+                firstNameActionPerformed(evt);
             }
         });
 
-        nom.addActionListener(new java.awt.event.ActionListener() {
+        lastName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nomActionPerformed(evt);
+                lastNameActionPerformed(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        jLabel1.setText("Last Name");
+        lastNameL.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        lastNameL.setText("Last Name");
 
-        label2.setText("Email");
+        emailL.setText("Email");
 
-        label3.setText("Organization");
+        orgL.setText("Organization");
 
-        label4.setText("First Name ");
+        firstNameL.setText("First Name ");
 
-        label5.setText("Date Of Birth");
+        birthL.setText("Date Of Birth");
 
-        label6.setText("Observation");
+        obsL.setText("Observation");
 
         countChar.setText("0/255");
 
-        observation.setColumns(20);
-        observation.setRows(5);
-        jScrollPane2.setViewportView(observation);
+        obs.setColumns(20);
+        obs.setRows(5);
+        jScrollPane2.setViewportView(obs);
 
-        jButton1.setText("Add");
+        add.setText("Add");
 
-        jButton2.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
-        jButton2.setText("Cancel");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        cancel.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        cancel.setText("Cancel");
+        cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                cancelActionPerformed(evt);
             }
         });
 
@@ -412,10 +367,10 @@ public class AddParticipant extends javax.swing.JFrame {
             .addGap(0, 30, Short.MAX_VALUE)
         );
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        jLabel2.setText("Selectionner un ou plusieurs événements :");
+        selectEvent.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        selectEvent.setText("Select event(s)");
 
-        birthDay.setDateFormatString("yyyy-MM-dd");
+        birth.setDateFormatString("yyyy-MM-dd");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -424,87 +379,83 @@ public class AddParticipant extends javax.swing.JFrame {
             .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(footer2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(jPanel4Layout.createSequentialGroup()
-                            .addComponent(jRadioButton1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jRadioButton2))
-                        .addComponent(label5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
-                            .addComponent(label4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(prenom, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(label3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(label2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel4Layout.createSequentialGroup()
-                            .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(countChar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(organization)
-                        .addComponent(nom, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel4Layout.createSequentialGroup()
-                            .addComponent(jButton2)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1))
-                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(birthDay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(85, 85, 85))
+                .addContainerGap(52, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(insertEventText)
+                        .addGap(18, 18, 18)
+                        .addComponent(insertCSV))
+                    .addComponent(birthL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(firstNameL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(orgL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(emailL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1)
+                    .addComponent(lastNameL)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(obsL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(countChar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(org, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lastName)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(add)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cancel))
+                    .addComponent(selectEvent)
+                    .addComponent(birth, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(firstName)
+                    .addComponent(email))
+                .addGap(55, 55, 55))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addContainerGap()
                 .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jRadioButton2)
-                    .addComponent(jRadioButton1, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(insertEventText)
+                    .addComponent(insertCSV))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
+                .addComponent(selectEvent)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1)
+                .addGap(30, 30, 30)
+                .addComponent(lastNameL, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(label4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(prenom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(39, 39, 39)
-                .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(firstNameL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(firstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(emailL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
                 .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21)
-                .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23)
-                .addComponent(birthDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19)
-                .addComponent(label3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(birthL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(birth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(orgL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(org, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(organization, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(countChar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(countChar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(obsL, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                    .addComponent(cancel)
+                    .addComponent(add))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addComponent(footer2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jRadioButton2.getAccessibleContext().setAccessibleName("CSVformat");
+        insertCSV.getAccessibleContext().setAccessibleName("CSVformat");
 
         navBar1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         navBar1.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
@@ -579,7 +530,7 @@ public class AddParticipant extends javax.swing.JFrame {
     }//GEN-LAST:event_accueilNavMouseClicked
 
     private void inputEventNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputEventNavMouseClicked
-        AddParticipant fen = new AddParticipant();
+        AddEvent fen = new AddEvent();
         if (fen.setValueEvent()) {
             fen.setVisible(true);
             this.dispose();
@@ -650,21 +601,21 @@ public class AddParticipant extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_deconnexionNav1MouseClicked
 
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+    private void insertEventTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertEventTextActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
+    }//GEN-LAST:event_insertEventTextActionPerformed
 
-    private void nomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomActionPerformed
+    private void lastNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_nomActionPerformed
+    }//GEN-LAST:event_lastNameActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_cancelActionPerformed
 
-    private void prenomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prenomActionPerformed
+    private void firstNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_prenomActionPerformed
+    }//GEN-LAST:event_firstNameActionPerformed
 
     /**
      * @param args the command line arguments
@@ -706,37 +657,37 @@ public class AddParticipant extends javax.swing.JFrame {
     private javax.swing.JMenu DisplayEventNav1;
     private javax.swing.JMenu accueilNav;
     private javax.swing.JMenu accueilNav1;
-    private com.toedter.calendar.JDateChooser birthDay;
+    private javax.swing.JButton add;
+    private com.toedter.calendar.JDateChooser birth;
+    private java.awt.Label birthL;
+    private javax.swing.JButton cancel;
     private java.awt.Label countChar;
     private javax.swing.JMenu deconnexionNav;
     private javax.swing.JMenu deconnexionNav1;
     private javax.swing.JTextField email;
+    private java.awt.Label emailL;
+    private javax.swing.JTextField firstName;
+    private java.awt.Label firstNameL;
     private javax.swing.JPanel footer2;
     private javax.swing.JMenu inputEventNav;
     private javax.swing.JMenu inputEventNav1;
     private javax.swing.JMenu inputParticipantNav;
     private javax.swing.JMenu inputParticipantNav1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JRadioButton insertCSV;
+    private javax.swing.JRadioButton insertEventText;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private java.awt.Label label1;
-    private java.awt.Label label2;
-    private java.awt.Label label3;
-    private java.awt.Label label4;
-    private java.awt.Label label5;
-    private java.awt.Label label6;
+    private javax.swing.JTextField lastName;
+    private javax.swing.JLabel lastNameL;
     private javax.swing.JMenuBar navBar;
     private javax.swing.JMenuBar navBar1;
-    private javax.swing.JTextField nom;
-    private javax.swing.JTextArea observation;
-    private javax.swing.JTextField organization;
-    private javax.swing.JTextField prenom;
+    private javax.swing.JTextArea obs;
+    private java.awt.Label obsL;
+    private javax.swing.JTextField org;
+    private java.awt.Label orgL;
+    private javax.swing.JLabel selectEvent;
     private javax.swing.JList<String> selectEvents;
     // End of variables declaration//GEN-END:variables
 }
