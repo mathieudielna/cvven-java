@@ -11,7 +11,7 @@ import vue.Connection;
  * Ouvre la première fenêtre de notre application
  * @author senpai
  */
-public class CvvenJava {
+public class EventManagement {
        
     /**
      * @param args the command line arguments

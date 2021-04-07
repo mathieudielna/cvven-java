@@ -204,12 +204,12 @@ public class Home extends javax.swing.JFrame {
 
     private void inputEventNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputEventNavMouseClicked
         AddEvent fen = new AddEvent();
-        //if(fen.setValueEvent()){
+        if(fen.setValueEvent()){
             fen.setVisible(true);
             this.dispose();
-        //}else {
+        }else {
             //fen.dispose();
-        //}
+        }
     }//GEN-LAST:event_inputEventNavMouseClicked
 
     private void inputParticipantNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputParticipantNavMouseClicked
@@ -246,12 +246,12 @@ public class Home extends javax.swing.JFrame {
     private void saisirEventMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saisirEventMouseClicked
         // TODO add your handling code here:
         AddEvent fen = new AddEvent();
-        //if(fen.setValueEvent()){
+        if(fen.setValueEvent()){
              fen.setVisible(true);
              this.dispose();
-        //}else {
-            //fen.dispose();
-        //}
+        }else {
+            fen.dispose();
+        }
     }//GEN-LAST:event_saisirEventMouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
