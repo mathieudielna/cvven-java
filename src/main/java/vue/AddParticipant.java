@@ -191,6 +191,57 @@ public class AddParticipant extends javax.swing.JFrame {
         }
     }
 
+    public void insertParticipantCSV() {
+        if (selectEvents.getSelectedValuesList().isEmpty()) {
+            if (selectEvents.getSelectedValuesList().isEmpty()) {
+                DialogTools.openMessageDialog("Vous n'avez pas sélectionner d'évènement !", "Erreur", DialogTools.ERROR_MESSAGE);
+            }
+        } else {
+            boolean isValid = true;
+            for (String selectEvent : selectEvents.getSelectedValuesList()) {
+                if (selectEvent.equalsIgnoreCase("Aucun évènement !")) {
+                    isValid = false;
+                }
+            }
+            if (!isValid) {
+                DialogTools.openMessageDialog("Le participant ne peut pas être inscrit à aucun évènement !", "Erreur !", DialogTools.ERROR_MESSAGE);
+            } else {
+                try {
+                    EventManagement EventManagement = new EventManagement();
+                    EventManagement.setDb();
+
+                    while (ChooseFileCSV.showOpenDialog(this) != JFileChooser.APPROVE_OPTION && ChooseFileCSV.showOpenDialog(this) != JFileChooser.CANCEL_OPTION) {
+                        if (ChooseFileCSV.showOpenDialog(this) != JFileChooser.ERROR_OPTION) {
+                            break;
+                        }
+                    }
+                    if (ChooseFileCSV.getSelectedFile() != null) {
+                        CSVFileRead csvFile = new CSVFileRead(ChooseFileCSV.getSelectedFile());
+                        if (csvFile.readControlFile() != null) {
+                            for (String[] uneLigne : csvFile.getLesLignes()) {
+                                EventManagement.insertParticipant(uneLigne[0], uneLigne[1], uneLigne[2], uneLigne[3], uneLigne[4], uneLigne[5]);
+                                EventManagement.closeMyStatement();
+
+                                for (String selectEvent : selectEvents.getSelectedValuesList()) {
+                                    if (!selectEvent.equalsIgnoreCase("Aucun évènement !")) {
+                                        EventManagement.insertParticipation(selectEvent, uneLigne[3]);
+                                        EventManagement.closeMyStatement();
+                                    }
+                                }
+                            }
+                            EventManagement.closeAll();
+                            DialogTools.openMessageDialog("L'ajout de participant est terminée !", "Ajout Terminée");
+                            this.setValueParticipant();
+                        } else {
+                            DialogTools.openMessageDialog("Vous n'avez pas sélectionné de fichier !", "Erreur Select Fichier !", DialogTools.WARNING_MESSAGE);
+                        }
+                    }
+                } catch (SQLException | ClassNotFoundException ex) {
+                    DialogTools.openMessageDialog(ex.getMessage(), "Erreur Participant !", DialogTools.ERROR_MESSAGE);
+                }
+            }
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -292,6 +343,11 @@ public class AddParticipant extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
         insertEventText.setText("Form");
+        insertEventText.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                insertEventTextMouseClicked(evt);
+            }
+        });
         insertEventText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 insertEventTextActionPerformed(evt);
@@ -299,6 +355,11 @@ public class AddParticipant extends javax.swing.JFrame {
         });
 
         insertCSV.setText("CSV file");
+        insertCSV.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                insertCSVMouseClicked(evt);
+            }
+        });
 
         label1.setAlignment(java.awt.Label.CENTER);
         label1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
@@ -306,7 +367,7 @@ public class AddParticipant extends javax.swing.JFrame {
 
         selectEvents.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
         selectEvents.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "No event now!" };
+            String[] strings = { "Aucun évènement !" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -341,9 +402,22 @@ public class AddParticipant extends javax.swing.JFrame {
 
         obs.setColumns(20);
         obs.setRows(5);
+        obs.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                obsKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                obsKeyReleased(evt);
+            }
+        });
         jScrollPane2.setViewportView(obs);
 
         add.setText("Add");
+        add.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addMouseClicked(evt);
+            }
+        });
 
         cancel.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         cancel.setText("Cancel");
@@ -383,8 +457,9 @@ public class AddParticipant extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(insertEventText)
-                        .addGap(18, 18, 18)
-                        .addComponent(insertCSV))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(insertCSV)
+                        .addGap(11, 11, 11))
                     .addComponent(birthL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(firstNameL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(orgL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -602,7 +677,10 @@ public class AddParticipant extends javax.swing.JFrame {
     }//GEN-LAST:event_deconnexionNav1MouseClicked
 
     private void insertEventTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertEventTextActionPerformed
-        // TODO add your handling code here:
+        if (insertEventText.isSelected()) {
+            this.insertParticipantText();
+        } else if (insertEventText.isSelected()) {
+            this.insertParticipantCSV();
     }//GEN-LAST:event_insertEventTextActionPerformed
 
     private void lastNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastNameActionPerformed
@@ -616,6 +694,30 @@ public class AddParticipant extends javax.swing.JFrame {
     private void firstNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_firstNameActionPerformed
+
+    private void insertEventTextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_insertEventTextMouseClicked
+        this.showField(true);
+    }//GEN-LAST:event_insertEventTextMouseClicked
+
+    private void insertCSVMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_insertCSVMouseClicked
+        this.showField(false);
+    }//GEN-LAST:event_insertCSVMouseClicked
+
+    private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
+        if (insertEventText.isSelected()) {
+            this.insertParticipantText();
+        } else if (insertCSV.isSelected()) {
+            this.insertParticipantCSV();
+        }
+    }//GEN-LAST:event_addMouseClicked
+
+    private void obsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_obsKeyPressed
+        countChar.setText(obs.getText().length() + "/255");
+    }//GEN-LAST:event_obsKeyPressed
+
+    private void obsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_obsKeyReleased
+        countChar.setText(obs.getText().length() + "/255");
+    }//GEN-LAST:event_obsKeyReleased
 
     /**
      * @param args the command line arguments
