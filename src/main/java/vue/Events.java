@@ -5,6 +5,13 @@
  */
 package vue;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
+import javax.swing.DefaultListModel;
+import javax.swing.table.DefaultTableModel;
+import modele.DialogTools;
+import modele.EventManagement;
 import modele.Session;
 
 /**
@@ -20,6 +27,31 @@ public class Events extends javax.swing.JFrame {
         initComponents();
     }
 
+    public final boolean setValueEventArchivement() {
+        try {
+            EventManagement EventManagement = new EventManagement();
+            EventManagement.setDb();
+            ResultSet rs = EventManagement.selectAllEventNArchive();
+            System.out.println("ok");
+
+            DefaultTableModel tbModel = (DefaultTableModel) tableEvent.getModel();
+            tbModel.setRowCount(0);
+
+            while (rs.next()) {
+                Object o[] = {rs.getString("theme"), rs.getString("date"), rs.getString("duration"),
+                    rs.getString("participantmax"), rs.getString("decription"), rs.getString("organisateur"),
+                    rs.getString("type"), rs.getString("archive")};
+
+                tbModel.addRow(o);
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            DialogTools.openMessageDialog(ex.getMessage(), "Erreur", DialogTools.ERROR_MESSAGE);
+            return false;
+        }
+        return false;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,7 +64,7 @@ public class Events extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tableEvent = new javax.swing.JTable();
         navBar = new javax.swing.JMenuBar();
         accueilNav = new javax.swing.JMenu();
         inputEventNav = new javax.swing.JMenu();
@@ -46,18 +78,18 @@ public class Events extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Events");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tableEvent.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Theme", "Date", "Duration", "ParticipantMax", "Description", "Organisateur", "Type ", "Archive"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tableEvent);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -65,7 +97,7 @@ public class Events extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 885, Short.MAX_VALUE)
                 .addContainerGap())
             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
@@ -137,7 +169,9 @@ public class Events extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(165, Short.MAX_VALUE))
         );
 
         pack();
@@ -151,22 +185,22 @@ public class Events extends javax.swing.JFrame {
 
     private void inputEventNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputEventNavMouseClicked
         AddEvent fen = new AddEvent();
-        //if(fen.setValueEvent()){
+        if (fen.setValueEvent()) {
             fen.setVisible(true);
             this.dispose();
-        //}else {
-            //fen.dispose();
-        //}
+        } else {
+            fen.dispose();
+        }
     }//GEN-LAST:event_inputEventNavMouseClicked
 
     private void inputParticipantNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputParticipantNavMouseClicked
         AddParticipant fen = new AddParticipant();
-        //if(fen.setValueParticipant()){
+        if (fen.setValueParticipant()) {
             fen.setVisible(true);
             this.dispose();
-        //}else{
-            //fen.dispose();
-        //}
+        } else {
+            fen.dispose();
+        }
     }//GEN-LAST:event_inputParticipantNavMouseClicked
 
     private void DisplayEventNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DisplayEventNavMouseClicked
@@ -226,7 +260,7 @@ public class Events extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable2;
     private javax.swing.JMenuBar navBar;
+    private javax.swing.JTable tableEvent;
     // End of variables declaration//GEN-END:variables
 }
