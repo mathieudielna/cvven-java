@@ -170,10 +170,10 @@ public class Home extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(139, 139, 139)
                                 .addComponent(saisirEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(61, 61, 61)
+                                .addGap(100, 100, 100)
                                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(261, 261, 261)
+                                .addGap(285, 285, 285)
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 129, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -181,15 +181,15 @@ public class Home extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addGap(30, 30, 30)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addGap(51, 51, 51)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saisirEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(51, 51, 51)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
                 .addComponent(footer1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -204,26 +204,27 @@ public class Home extends javax.swing.JFrame {
 
     private void inputEventNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputEventNavMouseClicked
         AddEvent fen = new AddEvent();
-        if(fen.setValueEvent()){
+        if (fen.setValueEvent()) {
             fen.setVisible(true);
             this.dispose();
-        }else {
-            //fen.dispose();
+        } else {
+            fen.dispose();
         }
     }//GEN-LAST:event_inputEventNavMouseClicked
 
     private void inputParticipantNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputParticipantNavMouseClicked
         AddParticipant fen = new AddParticipant();
-        if(fen.setValueParticipant()){
+        if (fen.setValueParticipant()) {
             fen.setVisible(true);
             this.dispose();
-        }else{
+        } else {
             fen.dispose();
         }
     }//GEN-LAST:event_inputParticipantNavMouseClicked
 
     private void DisplayEventNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DisplayEventNavMouseClicked
         Events fen = new Events();
+        fen.setValueEventArchivement();
         fen.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_DisplayEventNavMouseClicked
@@ -246,10 +247,10 @@ public class Home extends javax.swing.JFrame {
     private void saisirEventMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saisirEventMouseClicked
         // TODO add your handling code here:
         AddEvent fen = new AddEvent();
-        if(fen.setValueEvent()){
-             fen.setVisible(true);
-             this.dispose();
-        }else {
+        if (fen.setValueEvent()) {
+            fen.setVisible(true);
+            this.dispose();
+        } else {
             fen.dispose();
         }
     }//GEN-LAST:event_saisirEventMouseClicked
@@ -257,15 +258,20 @@ public class Home extends javax.swing.JFrame {
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
         // TODO add your handling code here:
         Events fen = new Events();
+        fen.setValueEventArchivement();
         fen.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton3MouseClicked
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-        // TODO add your handling code here:
         AddParticipant fen = new AddParticipant();
-        fen.setVisible(true);
-        this.dispose();
+        if (fen.setValueParticipant()) {
+            fen.setVisible(true);
+            this.dispose();
+        } else {
+            fen.dispose();
+        }
+
     }//GEN-LAST:event_jButton2MouseClicked
 
     /**
