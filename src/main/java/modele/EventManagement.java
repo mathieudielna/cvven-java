@@ -138,7 +138,7 @@ public final class EventManagement extends ConnectBDD {
      * @throws SQLException 
      */
     public ResultSet selectLesEventNonArchiver() throws SQLException{
-        super.setMyStatement("SELECT event.id_event, event.entitled FROM public.event WHERE event.archive IS NULL;");
+        super.setMyStatement("SELECT event.id_event, event.entitled  FROM public.event WHERE event.archive IS NULL;");
         return super.getResult();
     }
     
@@ -191,6 +191,17 @@ public final class EventManagement extends ConnectBDD {
             super.getMyStatement().setInt(9, Session.getIdUser());
             super.getMyStatement().setInt(10, idSalle);
             super.execSQLWithouthResult();
+    }
+    
+    /**
+     * Selectionne les éléments non archivés de la BDD
+     *
+     * @return le résultat de la requête
+     * @throws SQLException 
+    */
+    public ResultSet selectAllEventNArchive()throws SQLException{
+        super.setMyStatement("SELECT * FROM public.event WHERE archive IS NULL");
+        return super.getResult();
     }
     
     /*----------------------------------Table participant--------------------------------*/
