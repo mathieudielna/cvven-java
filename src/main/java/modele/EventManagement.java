@@ -49,12 +49,12 @@ public final class EventManagement extends ConnectBDD {
      * @throws SQLException 
      */
     public ResultSet selectInfoTableEventWithParticipation() throws SQLException{
-        super.setMyStatement("SELECT event.entitled, event.type, event.date, event.duration, event.theme, "
-                + "COUNT(particper.id_participant) AS nbParticipant, event.organisateur, event.archive "
-                + "FROM public.participer INNER JOIN public.event ON participer.id_event = event.id_event "
-                + "INNER JOIN public.participant ON participer.id_participant = participant.id_participant"
-                + "GROUP BY event.entitled, event.type, event.datedebut, event.duration, event.theme, event.organisateur, event.archive"
-                + "ORDER BY event.archive DESC;");
+        super.setMyStatement("SELECT event.entitled, event.type, event.date, event.duration, event.theme, " //select champs
+                + "COUNT(takepart.id_participant) AS nbParticipant, event.organisateur, event.archive " //select champs
+                + "FROM public.takepart INNER JOIN public.event ON takepart.id_event = event.id_event " //from + inner
+                + "INNER JOIN public.participant ON takepart.id_participant = participant.id_participant " //second + inner 
+                + "GROUP BY event.entitled, event.type, event.datedebut, event.duration, event.theme, event.organisateur, event.archive " //group by
+                + "ORDER BY event.archive DESC;"); //order by
         return super.getResult();
     }
     
@@ -65,8 +65,8 @@ public final class EventManagement extends ConnectBDD {
      * @param email
      * @throws SQLException 
      */
-    public void insertParticipation(String entitled, String email) throws SQLException{
-        int idEvent = Integer.parseInt(String.valueOf(entitled.substring(2, 3)));
+    public void insertTakePart(String entitled, String email) throws SQLException{
+        int idEvent = Integer.parseInt(String.valueOf(entitled.substring(2, 4)));
         super.setMyStatement("INSERT INTO public.takepart(id_event, id_participant) VALUES(?, (SELECT id_participant FROM public.participant WHERE email = ?));");
         super.getMyStatement().setInt(1, idEvent);
         super.getMyStatement().setString(2, email);
@@ -241,20 +241,20 @@ public final class EventManagement extends ConnectBDD {
     /**
      * Insert un nouveau participant à la base de données
      * 
-     * @param nom Nom du participant
-     * @param prenom Prénom du participant
+     * @param lastname Nom du participant
+     * @param firstname Prénom du participant
      * @param email Email du participant
-     * @param dateNaissance Date de naissance du participant
+     * @param birthd Date de naissance du participant
      * @param organisation
      * @param observations
      * @throws SQLException 
      */
-    public void insertParticipant(String nom, String prenom, String email, String dateNaissance, String organisation, String observations) 
+    public void insertParticipant(String lastname, String firstname, String email, String birthd, String organisation, String observations) 
             throws SQLException{
-            super.setMyStatement("INSERT INTO public.participant(nom, prenom, date_naissance, organisation, observations, email, id_user) VALUES(?, ?, ?, ?, ?, ?, ?);");
-            super.getMyStatement().setString(1, nom);
-            super.getMyStatement().setString(2, prenom);
-            super.getMyStatement().setObject(3, dateNaissance, Types.DATE);
+            super.setMyStatement("INSERT INTO public.participant(lastname, firstname, birthd, organisation, observation, email, id_user) VALUES(?, ?, ?, ?, ?, ?, ?);");
+            super.getMyStatement().setString(1, lastname);
+            super.getMyStatement().setString(2, firstname);
+            super.getMyStatement().setObject(3, birthd, Types.DATE);
             super.getMyStatement().setString(4, organisation);
             super.getMyStatement().setString(5, observations);
             super.getMyStatement().setString(6, email);
