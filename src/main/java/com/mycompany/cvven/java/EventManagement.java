@@ -8,7 +8,8 @@ package com.mycompany.cvven.java;
 import vue.Connection;
 
 /**
- * Ouvre la première fenêtre de notre application
+ * Execute la première fenêtre de notre application
+ * 
  * @author senpai
  */
 public class EventManagement {

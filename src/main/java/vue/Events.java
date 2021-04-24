@@ -5,6 +5,13 @@
  */
 package vue;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
+import javax.swing.DefaultListModel;
+import javax.swing.table.DefaultTableModel;
+import modele.DialogTools;
+import modele.EventManagement;
 import modele.Session;
 
 /**
@@ -20,6 +27,44 @@ public class Events extends javax.swing.JFrame {
         initComponents();
     }
 
+    
+    public final boolean setValueEventArchivement() {
+        try {
+            EventManagement EventManagement = new EventManagement();
+            EventManagement.setDb();
+            ResultSet rs = EventManagement.selectAllEventNArchive();
+            //System.out.println(rs);
+            DefaultTableModel tbModel = (DefaultTableModel) tableEvent.getModel();
+            tbModel.setRowCount(0);
+
+            if(rs != null){
+                //rs.absolute(1);
+                tbModel.addRow( new Object[]{"N°" + rs.getString("id_event"), rs.getString("theme"), rs.getString("date"), 
+                        rs.getString("duration"),rs.getString("participantmax"), 
+                        rs.getString("decription"), rs.getString("organisateur"),
+                        rs.getString("type")});
+                if (rs.next()) {
+                    //set up objet
+                    do{ 
+                        tbModel.addRow( new Object[]{"N°" + rs.getString("id_event"), rs.getString("theme"), rs.getString("date"), 
+                        rs.getString("duration"),rs.getString("participantmax"), 
+                        rs.getString("decription"), rs.getString("organisateur"),
+                        rs.getString("type")});
+                    }while(rs.next());
+                }
+                EventManagement.closeAll();
+                return true;
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            DialogTools.openMessageDialog(ex.getMessage(), "Erreur", DialogTools.ERROR_MESSAGE);
+            return false;
+        }
+        return false;
+    }
+    
+    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,12 +77,11 @@ public class Events extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tableEvent = new javax.swing.JTable();
         navBar = new javax.swing.JMenuBar();
         accueilNav = new javax.swing.JMenu();
         inputEventNav = new javax.swing.JMenu();
         inputParticipantNav = new javax.swing.JMenu();
-        DisplayEventNav = new javax.swing.JMenu();
         deconnexionNav = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -46,18 +90,23 @@ public class Events extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Events");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tableEvent.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "id event", "Theme", "Date", "Duration", "ParticipantMax", "Description", "Organisateur", "Type "
             }
-        ));
-        jScrollPane2.setViewportView(jTable2);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tableEvent);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -65,7 +114,7 @@ public class Events extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 885, Short.MAX_VALUE)
                 .addContainerGap())
             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
@@ -75,11 +124,11 @@ public class Events extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        navBar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        navBar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         navBar.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
 
         accueilNav.setText("Home");
@@ -108,15 +157,6 @@ public class Events extends javax.swing.JFrame {
             }
         });
         navBar.add(inputParticipantNav);
-
-        DisplayEventNav.setText("Events");
-        DisplayEventNav.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
-        DisplayEventNav.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                DisplayEventNavMouseClicked(evt);
-            }
-        });
-        navBar.add(DisplayEventNav);
 
         deconnexionNav.setText("Disconnect");
         deconnexionNav.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
@@ -151,29 +191,23 @@ public class Events extends javax.swing.JFrame {
 
     private void inputEventNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputEventNavMouseClicked
         AddEvent fen = new AddEvent();
-        //if(fen.setValueEvent()){
+        if (fen.setValueEvent()) {
             fen.setVisible(true);
             this.dispose();
-        //}else {
-            //fen.dispose();
-        //}
+        } else {
+            fen.dispose();
+        }
     }//GEN-LAST:event_inputEventNavMouseClicked
 
     private void inputParticipantNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputParticipantNavMouseClicked
         AddParticipant fen = new AddParticipant();
-        //if(fen.setValueParticipant()){
+        if (fen.setValueParticipant()) {
             fen.setVisible(true);
             this.dispose();
-        //}else{
-            //fen.dispose();
-        //}
+        } else {
+            fen.dispose();
+        }
     }//GEN-LAST:event_inputParticipantNavMouseClicked
-
-    private void DisplayEventNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DisplayEventNavMouseClicked
-        Events fen = new Events();
-        fen.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_DisplayEventNavMouseClicked
 
     private void deconnexionNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deconnexionNavMouseClicked
         Connection fen = new Connection();
@@ -218,7 +252,6 @@ public class Events extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu DisplayEventNav;
     private javax.swing.JMenu accueilNav;
     private javax.swing.JMenu deconnexionNav;
     private javax.swing.JMenu inputEventNav;
@@ -226,7 +259,7 @@ public class Events extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable2;
     private javax.swing.JMenuBar navBar;
+    private javax.swing.JTable tableEvent;
     // End of variables declaration//GEN-END:variables
 }

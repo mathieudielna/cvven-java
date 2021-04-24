@@ -146,7 +146,7 @@ public class AddEvent extends javax.swing.JFrame {
         cancelEvent.setBackground(new java.awt.Color(151, 21, 40));
         cancelEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
         cancelEvent.setForeground(new java.awt.Color(1, 1, 1));
-        cancelEvent.setText("Annuler");
+        cancelEvent.setText("Cancel");
         cancelEvent.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 cancelEventMouseClicked(evt);
@@ -159,10 +159,10 @@ public class AddEvent extends javax.swing.JFrame {
         roomSelectEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
         roomSelectEvent.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Veuillez choisir une option" }));
 
-        addEvent.setBackground(new java.awt.Color(34, 139, 34));
+        addEvent.setBackground(new java.awt.Color(204, 204, 204));
         addEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
         addEvent.setForeground(new java.awt.Color(1, 1, 1));
-        addEvent.setText("Créer");
+        addEvent.setText("Add");
         addEvent.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 addEventMouseClicked(evt);
