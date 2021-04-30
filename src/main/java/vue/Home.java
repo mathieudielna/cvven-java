@@ -5,6 +5,7 @@
  */
 package vue;
 
+import modele.DialogTools;
 import modele.Session;
 
 /**
@@ -29,11 +30,10 @@ public class Home extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        saisirEvent = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        addEvent = new javax.swing.JButton();
+        addPart = new javax.swing.JButton();
+        eventsBtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        footer1 = new javax.swing.JPanel();
         navBar = new javax.swing.JMenuBar();
         accueilNav = new javax.swing.JMenu();
         inputEventNav = new javax.swing.JMenu();
@@ -43,65 +43,44 @@ public class Home extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        saisirEvent.setBackground(new java.awt.Color(0, 0, 0));
-        saisirEvent.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        saisirEvent.setForeground(new java.awt.Color(255, 255, 255));
-        saisirEvent.setText("Add Event");
-        saisirEvent.addMouseListener(new java.awt.event.MouseAdapter() {
+        addEvent.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        addEvent.setText("Add Event");
+        addEvent.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                saisirEventMouseClicked(evt);
+                addEventMouseClicked(evt);
             }
         });
-        saisirEvent.addActionListener(new java.awt.event.ActionListener() {
+        addEvent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saisirEventActionPerformed(evt);
+                addEventActionPerformed(evt);
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(0, 0, 0));
-        jButton2.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Add Participant");
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+        addPart.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        addPart.setText("Add Participant");
+        addPart.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton2MouseClicked(evt);
+                addPartMouseClicked(evt);
             }
         });
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        addPart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                addPartActionPerformed(evt);
             }
         });
 
-        jButton3.setBackground(new java.awt.Color(0, 0, 0));
-        jButton3.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Events");
-        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+        eventsBtn.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        eventsBtn.setText("Events");
+        eventsBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton3MouseClicked(evt);
+                eventsBtnMouseClicked(evt);
             }
         });
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Event Management");
+        jLabel1.setText("EVENT MANAGEMENT");
 
-        footer1.setBackground(java.awt.Color.black);
-        footer1.setForeground(java.awt.Color.white);
-
-        javax.swing.GroupLayout footer1Layout = new javax.swing.GroupLayout(footer1);
-        footer1.setLayout(footer1Layout);
-        footer1Layout.setHorizontalGroup(
-            footer1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        footer1Layout.setVerticalGroup(
-            footer1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 29, Short.MAX_VALUE)
-        );
-
-        navBar.setBackground(new java.awt.Color(204, 204, 204));
         navBar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         navBar.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
 
@@ -159,38 +138,30 @@ public class Home extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(footer1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(139, 139, 139)
-                                .addComponent(saisirEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(100, 100, 100)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(285, 285, 285)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 129, Short.MAX_VALUE)))
+                        .addGap(12, 12, 12)
+                        .addComponent(addEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(eventsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(addPart, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addGap(40, 40, 40)
                 .addComponent(jLabel1)
-                .addGap(51, 51, 51)
+                .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(saisirEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(51, 51, 51)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
-                .addComponent(footer1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(addEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(addPart, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(eventsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(141, Short.MAX_VALUE))
         );
 
         pack();
@@ -224,9 +195,12 @@ public class Home extends javax.swing.JFrame {
 
     private void DisplayEventNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DisplayEventNavMouseClicked
         Events fen = new Events();
-        fen.setValueEventArchivement();
-        fen.setVisible(true);
-        this.dispose();
+        if (fen.setValueEventArchivement()) {
+            fen.setVisible(true);
+            this.dispose();
+        } else {
+            fen.dispose();
+        }
     }//GEN-LAST:event_DisplayEventNavMouseClicked
 
     private void deconnexionNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deconnexionNavMouseClicked
@@ -236,15 +210,15 @@ public class Home extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_deconnexionNavMouseClicked
 
-    private void saisirEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saisirEventActionPerformed
+    private void addEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEventActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_saisirEventActionPerformed
+    }//GEN-LAST:event_addEventActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void addPartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPartActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_addPartActionPerformed
 
-    private void saisirEventMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saisirEventMouseClicked
+    private void addEventMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addEventMouseClicked
         // TODO add your handling code here:
         AddEvent fen = new AddEvent();
         if (fen.setValueEvent()) {
@@ -253,17 +227,25 @@ public class Home extends javax.swing.JFrame {
         } else {
             fen.dispose();
         }
-    }//GEN-LAST:event_saisirEventMouseClicked
+    }//GEN-LAST:event_addEventMouseClicked
 
-    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+    private void eventsBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_eventsBtnMouseClicked
         // TODO add your handling code here:
         Events fen = new Events();
-        fen.setValueEventArchivement();
-        fen.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jButton3MouseClicked
+        AddEvent fen2 = new AddEvent();
+        if (fen.setValueEventArchivement()) {
+            fen.setVisible(true);
+            this.dispose();
+        } else {
+            fen.dispose();
+            DialogTools.openMessageDialog("Aucun evenement, veuillez en insérer un !!!", "INFO", DialogTools.WARNING_MESSAGE);
+            fen2.setValueEvent();
+            fen2.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_eventsBtnMouseClicked
 
-    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+    private void addPartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addPartMouseClicked
         AddParticipant fen = new AddParticipant();
         if (fen.setValueParticipant()) {
             fen.setVisible(true);
@@ -272,7 +254,7 @@ public class Home extends javax.swing.JFrame {
             fen.dispose();
         }
 
-    }//GEN-LAST:event_jButton2MouseClicked
+    }//GEN-LAST:event_addPartMouseClicked
 
     /**
      * @param args the command line arguments
@@ -312,14 +294,13 @@ public class Home extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu DisplayEventNav;
     private javax.swing.JMenu accueilNav;
+    private javax.swing.JButton addEvent;
+    private javax.swing.JButton addPart;
     private javax.swing.JMenu deconnexionNav;
-    private javax.swing.JPanel footer1;
+    private javax.swing.JButton eventsBtn;
     private javax.swing.JMenu inputEventNav;
     private javax.swing.JMenu inputParticipantNav;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar navBar;
-    private javax.swing.JButton saisirEvent;
     // End of variables declaration//GEN-END:variables
 }

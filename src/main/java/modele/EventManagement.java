@@ -206,9 +206,11 @@ public final class EventManagement extends ConnectBDD {
      */
     public void updateEvent(int id_event, String theme, String date, int duration, int participantmax,
             String decription, String organisateur, String type, String entitled, int id_room) throws SQLException {
-        super.setMyStatement("update event set (theme, date, duration, participantmax, "
+        super.setMyStatement("UPDATE event SET (theme, date, duration, participantmax, "
                 + "decription, organisateur, type, entitled, id_room)="
                 + "(?, ?, ?, ?, ?, ?, ?, ?, ?) WHERE id_event=?");
+        
+        
         super.getMyStatement().setString(1, theme);
         super.getMyStatement().setObject(2, date, Types.DATE);
         super.getMyStatement().setInt(3, duration);
@@ -232,6 +234,7 @@ public final class EventManagement extends ConnectBDD {
         super.setMyStatement("DELETE FROM takepart WHERE id_event=?;"
                 + "DELETE FROM event WHERE id_event=?;");
         super.getMyStatement().setInt(1, id_event);
+        super.getMyStatement().setInt(2, id_event);
         super.execSQLWithouthResult();
     }
 

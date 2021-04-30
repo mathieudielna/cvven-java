@@ -5,14 +5,23 @@
  */
 package vue;
 
+import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.formatDate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import modele.DialogTools;
 import modele.EventManagement;
 import modele.Session;
+import static org.apache.commons.validator.GenericTypeValidator.formatDate;
+import static org.apache.commons.validator.GenericTypeValidator.formatDate;
 
 /**
  *
@@ -27,7 +36,6 @@ public class Events extends javax.swing.JFrame {
         initComponents();
     }
 
-    
     public final boolean setValueEventArchivement() {
         try {
             EventManagement EventManagement = new EventManagement();
@@ -37,20 +45,20 @@ public class Events extends javax.swing.JFrame {
             DefaultTableModel tbModel = (DefaultTableModel) tableEvent.getModel();
             tbModel.setRowCount(0);
 
-            if(rs != null){
+            if (rs != null) {
                 //rs.absolute(1);
-                tbModel.addRow( new Object[]{"N°" + rs.getString("id_event"), rs.getString("theme"), rs.getString("date"), 
-                        rs.getString("duration") + "minutes",rs.getString("participantmax"), 
-                        rs.getString("decription"), rs.getString("organisateur"),
-                        rs.getString("type")});
+                tbModel.addRow(new Object[]{rs.getString("id_event"), rs.getString("theme"), rs.getString("date"),
+                    rs.getString("duration"), rs.getString("participantmax"),
+                    rs.getString("decription"), rs.getString("organisateur"),
+                    rs.getString("type"), rs.getString("entitled"), rs.getString("id_room")});
                 if (rs.next()) {
                     //set up objet
-                    do{ 
-                        tbModel.addRow( new Object[]{"N°" + rs.getString("id_event"), rs.getString("theme"), rs.getString("date"), 
-                        rs.getString("duration") + "minutes",rs.getString("participantmax"), 
-                        rs.getString("decription"), rs.getString("organisateur"),
-                        rs.getString("type")});
-                    }while(rs.next());
+                    do {
+                        tbModel.addRow(new Object[]{rs.getString("id_event"), rs.getString("theme"), rs.getString("date"),
+                            rs.getString("duration"), rs.getString("participantmax"),
+                            rs.getString("decription"), rs.getString("organisateur"),
+                            rs.getString("type"), rs.getString("entitled"), rs.getString("id_room")});
+                    } while (rs.next());
                 }
                 EventManagement.closeAll();
                 return true;
@@ -62,8 +70,6 @@ public class Events extends javax.swing.JFrame {
         }
         return false;
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -81,12 +87,12 @@ public class Events extends javax.swing.JFrame {
         DurationL = new javax.swing.JLabel();
         dateL = new javax.swing.JLabel();
         pmL = new javax.swing.JLabel();
-        pm1 = new javax.swing.JTextField();
+        organisateur = new javax.swing.JTextField();
         theme = new javax.swing.JTextField();
-        date = new com.toedter.calendar.JDateChooser();
+        dateEvent = new com.toedter.calendar.JDateChooser();
         durationEvent = new javax.swing.JSpinner();
         themeL2 = new javax.swing.JLabel();
-        theme1 = new javax.swing.JTextField();
+        entitled = new javax.swing.JTextField();
         dateL2 = new javax.swing.JLabel();
         typeEvent = new javax.swing.JComboBox<>();
         pmL2 = new javax.swing.JLabel();
@@ -95,10 +101,14 @@ public class Events extends javax.swing.JFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         descriptionEvent = new javax.swing.JTextArea();
         nbCharDescEvent = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        modifBtn = new javax.swing.JButton();
+        deleteEvent = new javax.swing.JButton();
+        addBtn = new javax.swing.JButton();
+        participeEvent = new javax.swing.JButton();
+        label1 = new java.awt.Label();
+        infoRoom = new javax.swing.JButton();
+        idEvent = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
         navBar = new javax.swing.JMenuBar();
         accueilNav = new javax.swing.JMenu();
         inputEventNav = new javax.swing.JMenu();
@@ -112,15 +122,20 @@ public class Events extends javax.swing.JFrame {
 
             },
             new String [] {
-                "id event", "Theme", "Date", "Duration", "ParticipantMax", "Description", "Organisateur", "Type "
+                "id", "Theme", "Date", "Duration", "ParticipantMax", "Description", "Organisateur", "Type ", "Entitled", "id_room"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tableEvent.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableEventMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(tableEvent);
@@ -133,29 +148,29 @@ public class Events extends javax.swing.JFrame {
 
         pmL.setText("Type de l'événement ");
 
-        pm1.setToolTipText("");
+        organisateur.setToolTipText("");
 
-        date.setDateFormatString("yyyy-MM-dd");
+        dateEvent.setDateFormatString("yyyy-MM-dd");
 
         durationEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
         durationEvent.setModel(new javax.swing.SpinnerNumberModel(15, 15, 240, 1));
 
-        themeL2.setText("Intitule : ");
+        themeL2.setText("Entitled : ");
 
         dateL2.setText("Organisateur : ");
 
         typeEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
-        typeEvent.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Veuillez choisir une option", "colloques", "séminaires", "congrès" }));
+        typeEvent.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "...", "colloques", "séminaires", "congrès" }));
         typeEvent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 typeEventActionPerformed(evt);
             }
         });
 
-        pmL2.setText("Choix de salle ");
+        pmL2.setText("Salle");
 
         roomSelectEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
-        roomSelectEvent.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Veuillez choisir une option" }));
+        roomSelectEvent.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "...", "1", "2", "3", "4" }));
         roomSelectEvent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 roomSelectEventActionPerformed(evt);
@@ -182,86 +197,144 @@ public class Events extends javax.swing.JFrame {
         nbCharDescEvent.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         nbCharDescEvent.setText("0/255");
 
-        jButton1.setText("Modifier");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        modifBtn.setText("Modifier");
+        modifBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                modifBtnMouseClicked(evt);
+            }
+        });
+        modifBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                modifBtnActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Supprimer");
-
-        jButton3.setText("Ajouter un event");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+        deleteEvent.setText("Supprimer");
+        deleteEvent.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                deleteEventMouseClicked(evt);
             }
         });
 
-        jButton4.setText("Participant(s) à cette event");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+        addBtn.setText("Ajouter un event");
+        addBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addBtnMouseClicked(evt);
             }
         });
+        addBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addBtnActionPerformed(evt);
+            }
+        });
+
+        participeEvent.setText("Participant(s) à cette event");
+        participeEvent.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                participeEventMouseClicked(evt);
+            }
+        });
+        participeEvent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                participeEventActionPerformed(evt);
+            }
+        });
+
+        label1.setText("Tableau de bord de l'event");
+
+        infoRoom.setText("info room");
+        infoRoom.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                infoRoomMouseClicked(evt);
+            }
+        });
+        infoRoom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                infoRoomActionPerformed(evt);
+            }
+        });
+
+        idEvent.setEditable(false);
+
+        jLabel1.setText("id : ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 507, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(themeL2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(theme1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(themeL)
-                        .addGap(12, 12, 12)
-                        .addComponent(theme, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(dateL)
-                        .addGap(24, 24, 24)
-                        .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(DurationL)
-                        .addGap(3, 3, 3)
-                        .addComponent(durationEvent))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(dateL2)
-                        .addGap(18, 18, 18)
-                        .addComponent(pm1))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 787, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pmL)
-                            .addComponent(typeEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(31, 31, 31)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(roomSelectEvent, 0, 1, Short.MAX_VALUE)
-                            .addComponent(pmL2)))
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(dateL)
+                                .addGap(24, 24, 24)
+                                .addComponent(dateEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(DurationL)
+                                .addGap(3, 3, 3)
+                                .addComponent(durationEvent))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(dateL2)
+                                .addGap(18, 18, 18)
+                                .addComponent(organisateur))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(pmL)
+                                    .addComponent(typeEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(31, 31, 31)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(pmL2)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(roomSelectEvent, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(infoRoom))))
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(nbCharDescEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(modifBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(addBtn)
+                                .addGap(18, 18, 18)
+                                .addComponent(deleteEvent))
+                            .addComponent(participeEvent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(themeL2)
+                                    .addComponent(jLabel1))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(entitled, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(themeL)
+                                        .addGap(12, 12, 12)
+                                        .addComponent(theme, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(idEvent))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(30, 30, 30))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(nbCharDescEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton3)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2))
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(41, Short.MAX_VALUE))
+                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(8, 8, 8)
+                .addContainerGap()
+                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(idEvent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(themeL2)
-                    .addComponent(theme1)
+                    .addComponent(entitled)
                     .addComponent(themeL)
                     .addComponent(theme))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -273,40 +346,39 @@ public class Events extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dateEvent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(dateL))))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(dateL2)
-                    .addComponent(pm1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(organisateur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(pmL2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pmL2)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(pmL)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(typeEvent)
-                            .addComponent(roomSelectEvent))))
+                            .addComponent(roomSelectEvent)
+                            .addComponent(infoRoom))))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(nbCharDescEvent))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(modifBtn)
+                    .addComponent(deleteEvent)
+                    .addComponent(addBtn))
                 .addGap(18, 18, 18)
-                .addComponent(jButton4)
+                .addComponent(participeEvent)
                 .addGap(163, 163, 163))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2)
-                .addGap(17, 17, 17))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 556, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         navBar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -354,7 +426,7 @@ public class Events extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -416,17 +488,219 @@ public class Events extends javax.swing.JFrame {
         nbCharDescEvent.setText(descriptionEvent.getText().length() + "/255");
     }//GEN-LAST:event_descriptionEventKeyTyped
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void modifBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_modifBtnActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_addBtnActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void participeEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_participeEventActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_participeEventActionPerformed
+
+    private void tableEventMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableEventMouseClicked
+        // TODO add your handling code here:
+        int i = tableEvent.getSelectedRow();
+        TableModel model = tableEvent.getModel();
+
+        idEvent.setText(model.getValueAt(i, 0).toString());
+        entitled.setText(model.getValueAt(i, 8).toString());
+        theme.setText(model.getValueAt(i, 1).toString());
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            dateEvent.setDate(format.parse(model.getValueAt(i, 2).toString()));
+        } catch (ParseException ex) {
+            Logger.getLogger(Events.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        durationEvent.setValue(Integer.parseInt(model.getValueAt(i, 3).toString()));
+        descriptionEvent.setText(model.getValueAt(i, 5).toString());
+        organisateur.setText(model.getValueAt(i, 6).toString());
+
+        //selection du type d'event
+        String typeEv = model.getValueAt(i, 7).toString();
+
+        if (typeEv.equals("colloques")) {
+            typeEvent.setSelectedIndex(1);
+        } else if (typeEv.equals("séminaires")) {
+            typeEvent.setSelectedIndex(2);
+        } else if (typeEv.equals("congrès")) {
+            typeEvent.setSelectedIndex(3);
+        } else {
+            DialogTools.openMessageDialog("Le type d'événement ne correspond pas aux critères de l'application", "Erreur", DialogTools.ERROR_MESSAGE);
+        }
+
+        // choix salle
+        String roomChoice = model.getValueAt(i, 9).toString();
+
+        if (roomChoice.equals("1")) {
+            roomSelectEvent.setSelectedIndex(1);
+        } else if (roomChoice.equals("2")) {
+            roomSelectEvent.setSelectedIndex(2);
+        } else if (roomChoice.equals("3")) {
+            roomSelectEvent.setSelectedIndex(3);
+        } else if (roomChoice.equals("4")) {
+            roomSelectEvent.setSelectedIndex(4);
+        } else {
+            DialogTools.openMessageDialog("Aucune salle ne correspond à la salle entré", "Erreur", DialogTools.ERROR_MESSAGE);
+        }
+
+
+    }//GEN-LAST:event_tableEventMouseClicked
+
+    private void modifBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_modifBtnMouseClicked
+        // Modification d'un evenement 
+        int i = tableEvent.getSelectedRow();
+        TableModel model = tableEvent.getModel();
+        if (!idEvent.getText().isBlank()) {
+            EventManagement em = new EventManagement();
+            //valeur max participants par room
+            boolean check = false;
+            boolean checkV = false;
+            boolean champs = false;
+            int pm1 = 0;
+            try {
+                String roomS = (String) roomSelectEvent.getSelectedItem();
+                //verif salle 
+                if (roomS.equals("1")) {
+                    pm1 = 196;
+                    check = true;
+                } else if (roomS.equals("2")) {
+                    pm1 = 50;
+                    check = true;
+                } else if (roomS.equals("3")) {
+                    pm1 = 25;
+                    check = true;
+                } else if (roomS.equals("4")) {
+                    pm1 = 10;
+                    check = true;
+                } else {
+                    DialogTools.openMessageDialog("Veuillez selectionner une salle !", "Erreur", DialogTools.ERROR_MESSAGE);
+                    check = false;
+                }
+
+                //verif type 
+                String typeS = typeEvent.getItemAt(typeEvent.getSelectedIndex());
+                if (typeS.equals("...")) {
+                    checkV = false;
+                    DialogTools.openMessageDialog("Veuillez selectionner un event !", "Erreur", DialogTools.ERROR_MESSAGE);
+                } else {
+                    checkV = true;
+                }
+
+                //verifications des champs
+                if (entitled.getText().isBlank()) {
+                    champs = false;
+                    DialogTools.openMessageDialog("Completer le champs entitled* !", "Erreur", DialogTools.ERROR_MESSAGE);
+                } else if (theme.getText().isBlank()) {
+                    champs = false;
+                    DialogTools.openMessageDialog("Completer le champs theme* !", "Erreur", DialogTools.ERROR_MESSAGE);
+                } else if (dateEvent.getDate() == null) {
+                    champs = false;
+                    DialogTools.openMessageDialog("Completer le champs date* ! !", "Erreur", DialogTools.ERROR_MESSAGE);
+                } else if (durationEvent.getValue() == null) {
+                    champs = false;
+                    DialogTools.openMessageDialog("Completer le champs duration* ! !", "Erreur", DialogTools.ERROR_MESSAGE);
+                } else if (organisateur.getText().isBlank()) {
+                    champs = false;
+                    DialogTools.openMessageDialog("Completer le champs organisateur* ! !", "Erreur", DialogTools.ERROR_MESSAGE);
+                } else if (descriptionEvent.getText().isBlank()) {
+                    champs = false;
+                    DialogTools.openMessageDialog("Completer le champs desription* ! !", "Erreur", DialogTools.ERROR_MESSAGE);
+                } else {
+                    champs = true;
+                }
+
+                //si type event et salle ok
+                if (check && checkV && champs) {
+                    em.setDb();
+                    SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+                    em.updateEvent(Integer.valueOf(idEvent.getText()), theme.getText(), formatDate.format(dateEvent.getDate()),
+                            ((Integer) durationEvent.getValue()), pm1, descriptionEvent.getText(), organisateur.getText(),
+                            typeEvent.getItemAt(typeEvent.getSelectedIndex()), entitled.getText(),
+                            (Integer.valueOf(roomSelectEvent.getSelectedIndex())));
+                    em.closeAll();
+                    this.setValueEventArchivement();
+                    DialogTools.openMessageDialog("Event modifier avec succès !", " événement supprimer", DialogTools.INFO_MESSAGE);
+                }
+
+            } catch (SQLException | ClassNotFoundException ex) {
+                DialogTools.openMessageDialog(ex.getMessage(), "Erreur", DialogTools.ERROR_MESSAGE);
+            }
+
+        } else {
+            DialogTools.openMessageDialog("Veuillez selectionner un événement", "Erreur", DialogTools.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_modifBtnMouseClicked
+
+    private void addBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addBtnMouseClicked
+        AddEvent fen = new AddEvent();
+        if (fen.setValueEvent()) {
+            fen.setVisible(true);
+            this.dispose();
+        } else {
+            fen.dispose();
+        }
+    }//GEN-LAST:event_addBtnMouseClicked
+
+    private void participeEventMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_participeEventMouseClicked
+        // Ouvre une fenetre avec un tableau participant
+
+        int i = tableEvent.getSelectedRow();
+        TableModel model = tableEvent.getModel();
+        if (!idEvent.getText().isBlank()) {
+            int idE = Integer.parseInt(model.getValueAt(i, 0).toString());
+            ParticipantEvent fen = new ParticipantEvent();
+            if (fen.setValueEventParticipant(idE)) {
+                fen.setVisible(true);
+                this.dispose();
+            } else {
+                DialogTools.openMessageDialog("Aucun participant à cette événement", "Erreur", DialogTools.ERROR_MESSAGE);
+                fen.dispose();
+            }
+        } else {
+            DialogTools.openMessageDialog("Veuillez selectionner un événement", "Erreur", DialogTools.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_participeEventMouseClicked
+
+    private void infoRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_infoRoomActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_infoRoomActionPerformed
+
+    private void infoRoomMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_infoRoomMouseClicked
+        // TODO add your handling code here:
+        DialogTools.openMessageDialog("Salle : 1, Type : Conférence, Capacité : 196 \n"
+                + "Salle : 2, Type : Commission, Capacité : 50 \n"
+                + "Salle : 3, Type : Commission, Capacité : 25 \n"
+                + "Salle : 4, Type : Commission, Capacité : 10 ", "Information salles", DialogTools.INFO_MESSAGE);
+    }//GEN-LAST:event_infoRoomMouseClicked
+
+    private void deleteEventMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteEventMouseClicked
+        // TODO add your handling code here:
+        int i = tableEvent.getSelectedRow();
+        TableModel model = tableEvent.getModel();
+        if (!idEvent.getText().isBlank()) {
+            EventManagement em = new EventManagement();
+            int idE = Integer.parseInt(idEvent.getText());
+            System.out.println(idE);
+            try {
+                em.setDb();
+                em.deleteEvent(idE);
+                em.closeMyStatement();
+                em.closeAll();
+                this.setValueEventArchivement();
+                DialogTools.openMessageDialog("Event supprimer avec succès", " événement supprimer", DialogTools.INFO_MESSAGE);
+            } catch (SQLException | ClassNotFoundException ex) {
+                DialogTools.openMessageDialog(ex.getMessage(), "Erreur Participant !", DialogTools.ERROR_MESSAGE);
+            }
+        } else {
+            DialogTools.openMessageDialog("Veuillez selectionner un événement", "Erreur", DialogTools.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_deleteEventMouseClicked
 
     /**
      * @param args the command line arguments
@@ -445,13 +719,17 @@ public class Events extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Events.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Events.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Events.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Events.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Events.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Events.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Events.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Events.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -468,23 +746,25 @@ public class Events extends javax.swing.JFrame {
     private javax.swing.JLabel DurationL1;
     private javax.swing.JLabel OrganisationL1;
     private javax.swing.JMenu accueilNav;
-    private com.toedter.calendar.JDateChooser date;
+    private javax.swing.JButton addBtn;
     private javax.swing.JTextField date1;
+    private com.toedter.calendar.JDateChooser dateEvent;
     private javax.swing.JLabel dateL;
     private javax.swing.JLabel dateL1;
     private javax.swing.JLabel dateL2;
     private javax.swing.JMenu deconnexionNav;
+    private javax.swing.JButton deleteEvent;
     private javax.swing.JTextArea desc1;
     private javax.swing.JLabel descL1;
     private javax.swing.JTextArea descriptionEvent;
     private javax.swing.JTextField duration1;
     private javax.swing.JSpinner durationEvent;
+    private javax.swing.JTextField entitled;
+    private javax.swing.JTextField idEvent;
+    private javax.swing.JButton infoRoom;
     private javax.swing.JMenu inputEventNav;
     private javax.swing.JMenu inputParticipantNav;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -493,9 +773,12 @@ public class Events extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private java.awt.Label label1;
+    private javax.swing.JButton modifBtn;
     private javax.swing.JMenuBar navBar;
     private javax.swing.JLabel nbCharDescEvent;
-    private javax.swing.JTextField pm1;
+    private javax.swing.JTextField organisateur;
+    private javax.swing.JButton participeEvent;
     private javax.swing.JTextField pm2;
     private javax.swing.JLabel pmL;
     private javax.swing.JLabel pmL1;
@@ -504,7 +787,6 @@ public class Events extends javax.swing.JFrame {
     private javax.swing.JTable tableEvent;
     private javax.swing.JTable tableEvent1;
     private javax.swing.JTextField theme;
-    private javax.swing.JTextField theme1;
     private javax.swing.JLabel themeL;
     private javax.swing.JLabel themeL1;
     private javax.swing.JLabel themeL2;

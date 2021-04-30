@@ -87,13 +87,13 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
+          <Component id="jPanel1" alignment="0" min="-2" max="-2" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -107,69 +107,97 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <Component id="jScrollPane2" min="-2" pref="507" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="themeL2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="theme1" min="-2" pref="118" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="themeL" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                          <Component id="theme" min="-2" pref="118" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="dateL" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-                          <Component id="date" min="-2" pref="118" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="DurationL" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                          <Component id="durationEvent" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="dateL2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="pm1" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="pmL" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="typeEvent" alignment="0" min="-2" pref="166" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="roomSelectEvent" pref="0" max="32767" attributes="0"/>
-                              <Component id="pmL2" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Component id="jScrollPane5" alignment="1" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" min="-2" pref="787" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="jLabel9" min="-2" pref="198" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="dateL" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                                  <Component id="dateEvent" min="-2" pref="118" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="DurationL" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                                  <Component id="durationEvent" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="dateL2" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="organisateur" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="pmL" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="typeEvent" alignment="0" min="-2" pref="166" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="pmL2" min="-2" max="-2" attributes="0"/>
+                                      <Group type="102" attributes="0">
+                                          <Component id="roomSelectEvent" max="32767" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="infoRoom" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                              </Group>
+                              <Component id="jScrollPane5" alignment="1" max="32767" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Component id="jLabel9" min="-2" pref="198" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="nbCharDescEvent" min="-2" pref="147" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Component id="modifBtn" max="32767" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="addBtn" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="deleteEvent" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="participeEvent" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="themeL2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Component id="entitled" min="-2" pref="118" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="themeL" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                                          <Component id="theme" min="-2" pref="118" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Component id="idEvent" max="32767" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="label1" min="-2" pref="210" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
-                          <Component id="nbCharDescEvent" min="-2" pref="147" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="jButton1" max="32767" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="jButton3" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="jButton2" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="jButton4" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="41" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="label1" min="-2" pref="35" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="idEvent" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="themeL2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="theme1" alignment="3" max="32767" attributes="0"/>
+                      <Component id="entitled" alignment="3" max="32767" attributes="0"/>
                       <Component id="themeL" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="theme" alignment="3" max="32767" attributes="0"/>
                   </Group>
@@ -184,7 +212,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="date" min="-2" max="-2" attributes="0"/>
+                              <Component id="dateEvent" min="-2" max="-2" attributes="0"/>
                               <Component id="dateL" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -192,20 +220,18 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="dateL2" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="pm1" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="organisateur" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="pmL2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="pmL2" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="pmL" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="typeEvent" alignment="3" max="32767" attributes="0"/>
                               <Component id="roomSelectEvent" alignment="3" max="32767" attributes="0"/>
+                              <Component id="infoRoom" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -215,20 +241,20 @@
                       <Component id="nbCharDescEvent" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane5" min="-2" pref="64" max="-2" attributes="0"/>
+                  <Component id="jScrollPane5" min="-2" pref="184" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButton3" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="modifBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="deleteEvent" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="addBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jButton4" min="-2" max="-2" attributes="0"/>
+                  <Component id="participeEvent" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="163" max="-2" attributes="0"/>
               </Group>
-              <Group type="102" alignment="1" attributes="0">
-                  <Component id="jScrollPane2" max="32767" attributes="0"/>
-                  <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <Component id="jScrollPane2" min="-2" pref="556" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -244,8 +270,8 @@
             <Component class="javax.swing.JTable" name="tableEvent">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="8" rowCount="0">
-                    <Column editable="false" title="id event" type="java.lang.Object"/>
+                  <Table columnCount="10" rowCount="0">
+                    <Column editable="false" title="id" type="java.lang.Object"/>
                     <Column editable="false" title="Theme" type="java.lang.Object"/>
                     <Column editable="false" title="Date" type="java.lang.Object"/>
                     <Column editable="false" title="Duration" type="java.lang.Object"/>
@@ -253,9 +279,14 @@
                     <Column editable="false" title="Description" type="java.lang.Object"/>
                     <Column editable="false" title="Organisateur" type="java.lang.Object"/>
                     <Column editable="false" title="Type " type="java.lang.Object"/>
+                    <Column editable="false" title="Entitled" type="java.lang.Object"/>
+                    <Column editable="false" title="id_room" type="java.lang.Object"/>
                   </Table>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableEventMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -279,14 +310,14 @@
             <Property name="text" type="java.lang.String" value="Type de l&apos;&#xe9;v&#xe9;nement "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="pm1">
+        <Component class="javax.swing.JTextField" name="organisateur">
           <Properties>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="theme">
         </Component>
-        <Component class="com.toedter.calendar.JDateChooser" name="date">
+        <Component class="com.toedter.calendar.JDateChooser" name="dateEvent">
           <Properties>
             <Property name="dateFormatString" type="java.lang.String" value="yyyy-MM-dd"/>
           </Properties>
@@ -303,10 +334,10 @@
         </Component>
         <Component class="javax.swing.JLabel" name="themeL2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Intitule : "/>
+            <Property name="text" type="java.lang.String" value="Entitled : "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="theme1">
+        <Component class="javax.swing.JTextField" name="entitled">
         </Component>
         <Component class="javax.swing.JLabel" name="dateL2">
           <Properties>
@@ -320,7 +351,7 @@
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="4">
-                <StringItem index="0" value="Veuillez choisir une option"/>
+                <StringItem index="0" value="..."/>
                 <StringItem index="1" value="colloques"/>
                 <StringItem index="2" value="s&#xe9;minaires"/>
                 <StringItem index="3" value="congr&#xe8;s"/>
@@ -336,7 +367,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="pmL2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Choix de salle "/>
+            <Property name="text" type="java.lang.String" value="Salle"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="roomSelectEvent">
@@ -345,8 +376,12 @@
               <Font name="SansSerif" size="13" style="0"/>
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="1">
-                <StringItem index="0" value="Veuillez choisir une option"/>
+              <StringArray count="5">
+                <StringItem index="0" value="..."/>
+                <StringItem index="1" value="1"/>
+                <StringItem index="2" value="2"/>
+                <StringItem index="3" value="3"/>
+                <StringItem index="4" value="4"/>
               </StringArray>
             </Property>
           </Properties>
@@ -396,34 +431,64 @@
             <Property name="text" type="java.lang.String" value="0/255"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton1">
+        <Component class="javax.swing.JButton" name="modifBtn">
           <Properties>
             <Property name="text" type="java.lang.String" value="Modifier"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="modifBtnMouseClicked"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="modifBtnActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton2">
+        <Component class="javax.swing.JButton" name="deleteEvent">
           <Properties>
             <Property name="text" type="java.lang.String" value="Supprimer"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="deleteEventMouseClicked"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton3">
+        <Component class="javax.swing.JButton" name="addBtn">
           <Properties>
             <Property name="text" type="java.lang.String" value="Ajouter un event"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="addBtnMouseClicked"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addBtnActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton4">
+        <Component class="javax.swing.JButton" name="participeEvent">
           <Properties>
             <Property name="text" type="java.lang.String" value="Participant(s) &#xe0; cette event"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="participeEventMouseClicked"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="participeEventActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="java.awt.Label" name="label1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Tableau de bord de l&apos;event"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="infoRoom">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="info room"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="infoRoomMouseClicked"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="infoRoomActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JTextField" name="idEvent">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="id : "/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

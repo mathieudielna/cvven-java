@@ -5,7 +5,6 @@
  */
 package vue;
 
-import javax.swing.DefaultListModel;
 import modele.DialogTools;
 import modele.Session;
 import modele.CSVFileRead;
@@ -16,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
+
 import org.apache.commons.validator.routines.EmailValidator;
 
 /**
@@ -158,8 +157,8 @@ public class AddParticipant extends javax.swing.JFrame {
             }
         } else {
             boolean isValid = true;
-            for (String selectEvent : selectEvents.getSelectedValuesList()) {
-                if (selectEvent.equalsIgnoreCase("Aucun évènement !")) {
+            for (String sE : selectEvents.getSelectedValuesList()) {
+                if (sE.equalsIgnoreCase("Aucun évènement !")) {
                     isValid = false;
                 }
             }
@@ -171,13 +170,16 @@ public class AddParticipant extends javax.swing.JFrame {
                     SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
 
                     em.setDb();
+
+                    //INSERTION DU PARTICIPANT 
                     em.insertParticipant(lastName.getText(), firstName.getText(), email.getText(),
                             formatDate.format(birth.getDate()), org.getText(), obs.getText());
                     em.closeMyStatement();
 
-                    for (String selectEvent : selectEvents.getSelectedValuesList()) {
-                        if (!selectEvent.equalsIgnoreCase("Aucun évènement !")) {
-                            em.insertParticipation(selectEvent, email.getText());
+                    for (String sE : selectEvents.getSelectedValuesList()) {
+                        if (!sE.equalsIgnoreCase("Aucun évènement !")) {
+                            //System.out.println(sE);
+                            em.insertTakePart(sE, email.getText());
                         }
                     }
 
@@ -198,8 +200,8 @@ public class AddParticipant extends javax.swing.JFrame {
             }
         } else {
             boolean isValid = true;
-            for (String selectEvent : selectEvents.getSelectedValuesList()) {
-                if (selectEvent.equalsIgnoreCase("Aucun évènement !")) {
+            for (String sE : selectEvents.getSelectedValuesList()) {
+                if (sE.equalsIgnoreCase("Aucun évènement !")) {
                     isValid = false;
                 }
             }
@@ -222,9 +224,10 @@ public class AddParticipant extends javax.swing.JFrame {
                                 EventManagement.insertParticipant(uneLigne[0], uneLigne[1], uneLigne[2], uneLigne[3], uneLigne[4], uneLigne[5]);
                                 EventManagement.closeMyStatement();
 
-                                for (String selectEvent : selectEvents.getSelectedValuesList()) {
-                                    if (!selectEvent.equalsIgnoreCase("Aucun évènement !")) {
-                                        EventManagement.insertParticipation(selectEvent, uneLigne[3]);
+                                for (String sE : selectEvents.getSelectedValuesList()) {
+                                    if (!sE.equalsIgnoreCase("Aucun évènement !")) {
+                                        //System.out.println(selectEvent + " / " + uneLigne[3]);
+                                        EventManagement.insertTakePart(sE, uneLigne[3]);
                                         EventManagement.closeMyStatement();
                                     }
                                 }
@@ -252,12 +255,8 @@ public class AddParticipant extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        navBar = new javax.swing.JMenuBar();
-        accueilNav = new javax.swing.JMenu();
-        inputEventNav = new javax.swing.JMenu();
-        inputParticipantNav = new javax.swing.JMenu();
-        DisplayEventNav = new javax.swing.JMenu();
-        deconnexionNav = new javax.swing.JMenu();
+        buttonGroup = new javax.swing.ButtonGroup();
+        ChooseFileCSV = new javax.swing.JFileChooser();
         jPanel4 = new javax.swing.JPanel();
         insertEventText = new javax.swing.JRadioButton();
         insertCSV = new javax.swing.JRadioButton();
@@ -269,6 +268,7 @@ public class AddParticipant extends javax.swing.JFrame {
         lastName = new javax.swing.JTextField();
         org = new javax.swing.JTextField();
         lastNameL = new javax.swing.JLabel();
+        birth = new com.toedter.calendar.JDateChooser();
         emailL = new java.awt.Label();
         orgL = new java.awt.Label();
         firstNameL = new java.awt.Label();
@@ -279,70 +279,20 @@ public class AddParticipant extends javax.swing.JFrame {
         obs = new javax.swing.JTextArea();
         add = new javax.swing.JButton();
         cancel = new javax.swing.JButton();
-        footer2 = new javax.swing.JPanel();
         selectEvent = new javax.swing.JLabel();
-        birth = new com.toedter.calendar.JDateChooser();
         navBar1 = new javax.swing.JMenuBar();
         accueilNav1 = new javax.swing.JMenu();
         inputEventNav1 = new javax.swing.JMenu();
-        inputParticipantNav1 = new javax.swing.JMenu();
         DisplayEventNav1 = new javax.swing.JMenu();
         deconnexionNav1 = new javax.swing.JMenu();
-
-        navBar.setBackground(new java.awt.Color(204, 204, 204));
-        navBar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        navBar.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-
-        accueilNav.setText("Home");
-        accueilNav.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
-        accueilNav.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                accueilNavMouseClicked(evt);
-            }
-        });
-        navBar.add(accueilNav);
-
-        inputEventNav.setText("Add Event");
-        inputEventNav.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
-        inputEventNav.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                inputEventNavMouseClicked(evt);
-            }
-        });
-        navBar.add(inputEventNav);
-
-        inputParticipantNav.setText("Add Participant");
-        inputParticipantNav.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
-        inputParticipantNav.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                inputParticipantNavMouseClicked(evt);
-            }
-        });
-        navBar.add(inputParticipantNav);
-
-        DisplayEventNav.setText("Events");
-        DisplayEventNav.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
-        DisplayEventNav.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                DisplayEventNavMouseClicked(evt);
-            }
-        });
-        navBar.add(DisplayEventNav);
-
-        deconnexionNav.setText("Disconnect");
-        deconnexionNav.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
-        deconnexionNav.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                deconnexionNavMouseClicked(evt);
-            }
-        });
-        navBar.add(deconnexionNav);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
-        insertEventText.setText("Form");
+        buttonGroup.add(insertEventText);
+        insertEventText.setSelected(true);
+        insertEventText.setText("Complete form");
         insertEventText.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 insertEventTextMouseClicked(evt);
@@ -354,10 +304,16 @@ public class AddParticipant extends javax.swing.JFrame {
             }
         });
 
-        insertCSV.setText("CSV file");
+        buttonGroup.add(insertCSV);
+        insertCSV.setText("Set CSV file");
         insertCSV.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 insertCSVMouseClicked(evt);
+            }
+        });
+        insertCSV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insertCSVActionPerformed(evt);
             }
         });
 
@@ -385,19 +341,27 @@ public class AddParticipant extends javax.swing.JFrame {
             }
         });
 
-        lastNameL.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        lastNameL.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         lastNameL.setText("Last Name");
 
+        birth.setDateFormatString("yyyy-MM-dd");
+
+        emailL.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         emailL.setText("Email");
 
+        orgL.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         orgL.setText("Organization");
 
+        firstNameL.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         firstNameL.setText("First Name ");
 
+        birthL.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         birthL.setText("Date Of Birth");
 
+        obsL.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         obsL.setText("Observation");
 
+        countChar.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         countChar.setText("0/255");
 
         obs.setColumns(20);
@@ -421,90 +385,82 @@ public class AddParticipant extends javax.swing.JFrame {
 
         cancel.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         cancel.setText("Cancel");
+        cancel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cancelMouseClicked(evt);
+            }
+        });
         cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelActionPerformed(evt);
             }
         });
 
-        footer2.setBackground(java.awt.Color.black);
-        footer2.setForeground(java.awt.Color.white);
-
-        javax.swing.GroupLayout footer2Layout = new javax.swing.GroupLayout(footer2);
-        footer2.setLayout(footer2Layout);
-        footer2Layout.setHorizontalGroup(
-            footer2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        footer2Layout.setVerticalGroup(
-            footer2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 30, Short.MAX_VALUE)
-        );
-
-        selectEvent.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        selectEvent.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         selectEvent.setText("Select event(s)");
-
-        birth.setDateFormatString("yyyy-MM-dd");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(footer2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(52, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(insertEventText)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(insertCSV)
-                        .addGap(11, 11, 11))
-                    .addComponent(birthL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(firstNameL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(52, 52, 52)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(orgL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(emailL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1)
-                    .addComponent(lastNameL)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(obsL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(countChar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(org, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lastName)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(add)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cancel))
-                    .addComponent(selectEvent)
-                    .addComponent(birth, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(firstName)
-                    .addComponent(email))
-                .addGap(55, 55, 55))
+                    .addComponent(birthL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(birth, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(emailL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(firstNameL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(selectEvent)
+                            .addComponent(lastNameL)
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(jPanel4Layout.createSequentialGroup()
+                                        .addComponent(insertEventText)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(insertCSV))
+                                    .addComponent(lastName, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(firstName, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                            .addComponent(add)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cancel))
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                            .addComponent(obsL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(countChar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(org, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(insertEventText)
                     .addComponent(insertCSV))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(selectEvent)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lastNameL, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(firstNameL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
                 .addComponent(firstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(emailL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
                 .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -521,18 +477,17 @@ public class AddParticipant extends javax.swing.JFrame {
                     .addComponent(countChar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(obsL, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancel)
-                    .addComponent(add))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                .addComponent(footer2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(add)
+                    .addComponent(cancel))
+                .addGap(65, 65, 65))
         );
 
         insertCSV.getAccessibleContext().setAccessibleName("CSVformat");
 
-        navBar1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        navBar1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         navBar1.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
 
         accueilNav1.setText("Home");
@@ -552,15 +507,6 @@ public class AddParticipant extends javax.swing.JFrame {
             }
         });
         navBar1.add(inputEventNav1);
-
-        inputParticipantNav1.setText("Add Participant");
-        inputParticipantNav1.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
-        inputParticipantNav1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                inputParticipantNav1MouseClicked(evt);
-            }
-        });
-        navBar1.add(inputParticipantNav1);
 
         DisplayEventNav1.setText("Events");
         DisplayEventNav1.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
@@ -586,56 +532,15 @@ public class AddParticipant extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void accueilNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accueilNavMouseClicked
-        Home fen = new Home();
-        fen.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_accueilNavMouseClicked
-
-    private void inputEventNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputEventNavMouseClicked
-        AddEvent fen = new AddEvent();
-        if (fen.setValueEvent()) {
-            fen.setVisible(true);
-            this.dispose();
-        } else {
-            fen.dispose();
-        }
-    }//GEN-LAST:event_inputEventNavMouseClicked
-
-    private void inputParticipantNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputParticipantNavMouseClicked
-        AddParticipant fen = new AddParticipant();
-        if (fen.setValueParticipant()) {
-            fen.setVisible(true);
-            this.dispose();
-        } else {
-            fen.dispose();
-        }
-    }//GEN-LAST:event_inputParticipantNavMouseClicked
-
-    private void DisplayEventNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DisplayEventNavMouseClicked
-        Events fen = new Events();
-        fen.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_DisplayEventNavMouseClicked
-
-    private void deconnexionNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deconnexionNavMouseClicked
-        Connection fen = new Connection();
-        fen.setVisible(true);
-        Session.destructSession();
-        this.dispose();
-    }//GEN-LAST:event_deconnexionNavMouseClicked
 
     private void accueilNav1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accueilNav1MouseClicked
         Home fen = new Home();
@@ -653,20 +558,14 @@ public class AddParticipant extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_inputEventNav1MouseClicked
 
-    private void inputParticipantNav1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputParticipantNav1MouseClicked
-        AddParticipant fen = new AddParticipant();
-        if (fen.setValueParticipant()) {
+    private void DisplayEventNav1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DisplayEventNav1MouseClicked
+        Events fen = new Events();
+        if (fen.setValueEventArchivement()) {
             fen.setVisible(true);
             this.dispose();
         } else {
             fen.dispose();
         }
-    }//GEN-LAST:event_inputParticipantNav1MouseClicked
-
-    private void DisplayEventNav1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DisplayEventNav1MouseClicked
-        Events fen = new Events();
-        fen.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_DisplayEventNav1MouseClicked
 
     private void deconnexionNav1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deconnexionNav1MouseClicked
@@ -677,10 +576,7 @@ public class AddParticipant extends javax.swing.JFrame {
     }//GEN-LAST:event_deconnexionNav1MouseClicked
 
     private void insertEventTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertEventTextActionPerformed
-        if (insertEventText.isSelected()) {
-            this.insertParticipantText();
-        } else if (insertEventText.isSelected()) {
-            this.insertParticipantCSV();
+        //empty 
     }//GEN-LAST:event_insertEventTextActionPerformed
 
     private void lastNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastNameActionPerformed
@@ -701,6 +597,7 @@ public class AddParticipant extends javax.swing.JFrame {
 
     private void insertCSVMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_insertCSVMouseClicked
         this.showField(false);
+        this.insertParticipantCSV();
     }//GEN-LAST:event_insertCSVMouseClicked
 
     private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
@@ -714,10 +611,22 @@ public class AddParticipant extends javax.swing.JFrame {
     private void obsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_obsKeyPressed
         countChar.setText(obs.getText().length() + "/255");
     }//GEN-LAST:event_obsKeyPressed
-
+;
     private void obsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_obsKeyReleased
         countChar.setText(obs.getText().length() + "/255");
     }//GEN-LAST:event_obsKeyReleased
+
+    private void cancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelMouseClicked
+        // TODO add your handling code here:
+        Home fen = new Home();
+        fen.setVisible(true);
+        this.setDefaultValue();
+        this.dispose();
+    }//GEN-LAST:event_cancelMouseClicked
+
+    private void insertCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertCSVActionPerformed
+       //empty
+    }//GEN-LAST:event_insertCSVActionPerformed
 
     /**
      * @param args the command line arguments
@@ -736,13 +645,17 @@ public class AddParticipant extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddParticipant.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddParticipant.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddParticipant.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddParticipant.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddParticipant.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddParticipant.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddParticipant.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddParticipant.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -755,26 +668,21 @@ public class AddParticipant extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu DisplayEventNav;
+    private javax.swing.JFileChooser ChooseFileCSV;
     private javax.swing.JMenu DisplayEventNav1;
-    private javax.swing.JMenu accueilNav;
     private javax.swing.JMenu accueilNav1;
     private javax.swing.JButton add;
     private com.toedter.calendar.JDateChooser birth;
     private java.awt.Label birthL;
+    private javax.swing.ButtonGroup buttonGroup;
     private javax.swing.JButton cancel;
     private java.awt.Label countChar;
-    private javax.swing.JMenu deconnexionNav;
     private javax.swing.JMenu deconnexionNav1;
     private javax.swing.JTextField email;
     private java.awt.Label emailL;
     private javax.swing.JTextField firstName;
     private java.awt.Label firstNameL;
-    private javax.swing.JPanel footer2;
-    private javax.swing.JMenu inputEventNav;
     private javax.swing.JMenu inputEventNav1;
-    private javax.swing.JMenu inputParticipantNav;
-    private javax.swing.JMenu inputParticipantNav1;
     private javax.swing.JRadioButton insertCSV;
     private javax.swing.JRadioButton insertEventText;
     private javax.swing.JPanel jPanel4;
@@ -783,7 +691,6 @@ public class AddParticipant extends javax.swing.JFrame {
     private java.awt.Label label1;
     private javax.swing.JTextField lastName;
     private javax.swing.JLabel lastNameL;
-    private javax.swing.JMenuBar navBar;
     private javax.swing.JMenuBar navBar1;
     private javax.swing.JTextArea obs;
     private java.awt.Label obsL;
