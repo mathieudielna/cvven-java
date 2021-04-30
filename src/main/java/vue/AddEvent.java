@@ -5,7 +5,6 @@
  */
 package vue;
 
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -26,9 +25,8 @@ public class AddEvent extends javax.swing.JFrame {
     public AddEvent() {
         initComponents();
     }
-    
-      
-    private void setDefaultValue(){
+
+    private void setDefaultValue() {
         entitledEvent.setText(null);
         themeEvent.setText(null);
         dateEvent.setDate(null);
@@ -40,31 +38,30 @@ public class AddEvent extends javax.swing.JFrame {
         nbCharDescEvent.setText("0/255");
     }
 
-    
-        public final boolean setValueEvent(){
+    public final boolean setValueEvent() {
         try {
             EventManagement EventManagement = new EventManagement();
             EventManagement.setDb();
             ResultSet result = EventManagement.selectAllRoom();
-            
-            if(result != null){
+
+            if (result != null) {
                 boolean isExist = false;
-                do{
-                    String salle = "N°" + result.getString("id_room") + " Salle de " + result.getString("roomtype") + "("+result.getString("capacity") + ")";
-                    for(int i = 0; i < this.roomSelectEvent.getItemCount(); i++){
-                        if(this.roomSelectEvent.getItemAt(i).equalsIgnoreCase(salle)){
+                do {
+                    String salle = "N°" + result.getString("id_room") + " Salle de " + result.getString("roomtype") + "(" + result.getString("capacity") + ")";
+                    for (int i = 0; i < this.roomSelectEvent.getItemCount(); i++) {
+                        if (this.roomSelectEvent.getItemAt(i).equalsIgnoreCase(salle)) {
                             isExist = true;
                         }
                     }
-                    if(!isExist){
+                    if (!isExist) {
                         this.roomSelectEvent.addItem(salle);
                     }
                     isExist = false;
-                }while(result.next());
-            
+                } while (result.next());
+
                 EventManagement.closeAll();
                 return true;
-            }else{
+            } else {
                 throw new SQLException("Aucune salle n'as été trouvée ! Veillez contactez l'administrateur.");
             }
         } catch (SQLException | ClassNotFoundException ex) {
@@ -72,6 +69,7 @@ public class AddEvent extends javax.swing.JFrame {
             return false;
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -104,7 +102,6 @@ public class AddEvent extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         navBar = new javax.swing.JMenuBar();
         accueilNav = new javax.swing.JMenu();
-        inputEventNav = new javax.swing.JMenu();
         inputParticipantNav = new javax.swing.JMenu();
         DisplayEventNav = new javax.swing.JMenu();
         deconnexionNav = new javax.swing.JMenu();
@@ -140,10 +137,9 @@ public class AddEvent extends javax.swing.JFrame {
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
         jLabel7.setText("Organisateur");
 
-        cancelEvent.setBackground(new java.awt.Color(151, 21, 40));
         cancelEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
         cancelEvent.setForeground(new java.awt.Color(1, 1, 1));
         cancelEvent.setText("Cancel");
@@ -153,13 +149,17 @@ public class AddEvent extends javax.swing.JFrame {
             }
         });
 
-        jLabel8.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
         jLabel8.setText("Choix de la salle");
 
         roomSelectEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
         roomSelectEvent.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Veuillez choisir une option" }));
+        roomSelectEvent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                roomSelectEventActionPerformed(evt);
+            }
+        });
 
-        addEvent.setBackground(new java.awt.Color(204, 204, 204));
         addEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
         addEvent.setForeground(new java.awt.Color(1, 1, 1));
         addEvent.setText("Add");
@@ -174,26 +174,26 @@ public class AddEvent extends javax.swing.JFrame {
             }
         });
 
-        jLabel10.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
         jLabel10.setText("Type évènement");
 
-        jLabel9.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
         jLabel9.setText("Description de l'évènement");
 
-        nbCharDescEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        nbCharDescEvent.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
         nbCharDescEvent.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         nbCharDescEvent.setText("0/255");
 
         themeEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
         jLabel1.setText("Intitulé de l'évènement");
 
         jLabel5.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Add event ");
+        jLabel5.setText("ADD EVENT");
 
-        jLabel2.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
         jLabel2.setText("Thème de l'évènement");
 
         entitledEvent.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
@@ -203,14 +203,13 @@ public class AddEvent extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
         jLabel3.setText("Date de l'événement");
 
-        jLabel4.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
         jLabel4.setText("Durée de l'événement");
 
-        navBar.setBackground(new java.awt.Color(204, 204, 204));
-        navBar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        navBar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         navBar.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
 
         accueilNav.setText("Home");
@@ -221,15 +220,6 @@ public class AddEvent extends javax.swing.JFrame {
             }
         });
         navBar.add(accueilNav);
-
-        inputEventNav.setText("Add Event");
-        inputEventNav.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
-        inputEventNav.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                inputEventNavMouseClicked(evt);
-            }
-        });
-        navBar.add(inputEventNav);
 
         inputParticipantNav.setText("Add Participant");
         inputParticipantNav.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
@@ -270,71 +260,66 @@ public class AddEvent extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGap(62, 62, 62)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(themeEvent)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4)
                             .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(nbCharDescEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(entitledEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2)
-                                    .addComponent(themeEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGap(32, 32, 32)
+                                    .addComponent(jLabel10)
+                                    .addComponent(typeEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(addEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(57, 57, 57)
-                                            .addComponent(cancelEvent, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE))
-                                        .addComponent(organisateurEvent)
-                                        .addComponent(durationEvent)
-                                        .addComponent(dateEvent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(jLabel4)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(nbCharDescEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jLabel10)
-                                                .addComponent(typeEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGap(49, 49, 49)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(roomSelectEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jLabel8)))
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(0, 21, Short.MAX_VALUE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel8)
+                                        .addGap(52, 52, 52))
+                                    .addComponent(roomSelectEvent, 0, 1, Short.MAX_VALUE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(addEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cancelEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane2)
+                            .addComponent(organisateurEvent)
+                            .addComponent(durationEvent)
+                            .addComponent(dateEvent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1)
+                            .addComponent(entitledEvent))
+                        .addGap(0, 48, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
+                .addContainerGap()
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(entitledEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                .addComponent(entitledEvent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(themeEvent, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(themeEvent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(dateEvent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                .addGap(3, 3, 3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(durationEvent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(organisateurEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(organisateurEvent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -342,17 +327,17 @@ public class AddEvent extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(roomSelectEvent)
                     .addComponent(typeEvent))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(nbCharDescEvent, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
+                    .addComponent(jLabel9)
+                    .addComponent(nbCharDescEvent))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cancelEvent, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
-                    .addComponent(addEvent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(25, 25, 25))
+                .addGap(35, 35, 35)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cancelEvent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(addEvent))
+                .addGap(40, 40, 40))
         );
 
         pack();
@@ -364,30 +349,24 @@ public class AddEvent extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_accueilNavMouseClicked
 
-    private void inputEventNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputEventNavMouseClicked
-        AddEvent fen = new AddEvent();
-        if(fen.setValueEvent()){
-            fen.setVisible(true);
-            this.dispose();
-        }else {
-            fen.dispose();
-        }
-    }//GEN-LAST:event_inputEventNavMouseClicked
-
     private void inputParticipantNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputParticipantNavMouseClicked
         AddParticipant fen = new AddParticipant();
-        if(fen.setValueParticipant()){
+        if (fen.setValueParticipant()) {
             fen.setVisible(true);
             this.dispose();
-        }else{
+        } else {
             fen.dispose();
         }
     }//GEN-LAST:event_inputParticipantNavMouseClicked
 
     private void DisplayEventNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DisplayEventNavMouseClicked
         Events fen = new Events();
-        fen.setVisible(true);
-        this.dispose();
+        if (fen.setValueEventArchivement()) {
+            fen.setVisible(true);
+            this.dispose();
+        } else {
+            fen.dispose();
+        }
     }//GEN-LAST:event_DisplayEventNavMouseClicked
 
     private void deconnexionNavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deconnexionNavMouseClicked
@@ -413,39 +392,39 @@ public class AddEvent extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelEventMouseClicked
 
     private void addEventMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addEventMouseClicked
-        if(entitledEvent.getText().isBlank()){
+        if (entitledEvent.getText().isBlank()) {
             DialogTools.openMessageDialog("Veuillez indiquez l'intitule de l'évènement", "Erreur", DialogTools.ERROR_MESSAGE);
-        }else if(themeEvent.getText().isBlank()){
+        } else if (themeEvent.getText().isBlank()) {
             DialogTools.openMessageDialog("Veuillez indiquez le thème de l'évènement", "Erreur", DialogTools.ERROR_MESSAGE);
-        }else if(dateEvent.getDate() == null || dateEvent.getDate().before(new Date())){
-            if(dateEvent.getDate()== null){
+        } else if (dateEvent.getDate() == null || dateEvent.getDate().before(new Date())) {
+            if (dateEvent.getDate() == null) {
                 DialogTools.openMessageDialog("Veuillez indiquez la date de l'évènement", "Erreur", DialogTools.ERROR_MESSAGE);
-            }else if(dateEvent.getDate().before(new Date())){
+            } else if (dateEvent.getDate().before(new Date())) {
                 DialogTools.openMessageDialog("La date de l'évènement doit se dérouler après la date actuelle", "Erreur", DialogTools.ERROR_MESSAGE);
             }
-        }else if(organisateurEvent.getText().isBlank()){
+        } else if (organisateurEvent.getText().isBlank()) {
             DialogTools.openMessageDialog("Veuillez indiquez l'organisateur de l'évènement", "Erreur", DialogTools.ERROR_MESSAGE);
-        }else if(typeEvent.getItemAt(typeEvent.getSelectedIndex()).equalsIgnoreCase("Veuillez choisir une option")){
+        } else if (typeEvent.getItemAt(typeEvent.getSelectedIndex()).equalsIgnoreCase("Veuillez choisir une option")) {
             DialogTools.openMessageDialog("Veuillez choisir un évènement", "Erreur", DialogTools.ERROR_MESSAGE);
-        }else if(roomSelectEvent.getItemAt(roomSelectEvent.getSelectedIndex()).equalsIgnoreCase("Veuillez choisir une option")){
+        } else if (roomSelectEvent.getItemAt(roomSelectEvent.getSelectedIndex()).equalsIgnoreCase("Veuillez choisir une option")) {
             DialogTools.openMessageDialog("Veuillez choisir une salle", "Erreur", DialogTools.ERROR_MESSAGE);
-        }else if(descriptionEvent.getText().isBlank() || descriptionEvent.getText().length() > 255){
-            if(descriptionEvent.getText().isBlank()){
+        } else if (descriptionEvent.getText().isBlank() || descriptionEvent.getText().length() > 255) {
+            if (descriptionEvent.getText().isBlank()) {
                 DialogTools.openMessageDialog("Veuillez indiquez une description à l'évènement", "Erreur", DialogTools.ERROR_MESSAGE);
-            }else{
+            } else {
                 DialogTools.openMessageDialog("Veuillez ne pas dépassez les 255 caractères", "Erreur", DialogTools.ERROR_MESSAGE);
             }
-        }else{
+        } else {
             try {
                 EventManagement EventManagement = new EventManagement();
                 EventManagement.setDb();
                 SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
-                EventManagement.insertEvent(entitledEvent.getText(), themeEvent.getText(), formatDate.format(dateEvent.getDate()), 
-                        ((Integer)durationEvent.getValue()), descriptionEvent.getText(), 
-                        organisateurEvent.getText(), 
+                EventManagement.insertEvent(entitledEvent.getText(), themeEvent.getText(), formatDate.format(dateEvent.getDate()),
+                        ((Integer) durationEvent.getValue()), descriptionEvent.getText(),
+                        organisateurEvent.getText(),
                         typeEvent.getItemAt(typeEvent.getSelectedIndex()), roomSelectEvent.getItemAt(roomSelectEvent.getSelectedIndex()));
                 EventManagement.closeAll();
-                DialogTools.openMessageDialog("Insertion de l'évènement terminée !","Insertion Terminée");
+                DialogTools.openMessageDialog("Insertion de l'évènement terminée !", "Insertion Terminée");
                 this.setDefaultValue();
             } catch (SQLException | ClassNotFoundException ex) {
                 DialogTools.openMessageDialog(ex.getMessage(), "Erreur", DialogTools.ERROR_MESSAGE);
@@ -464,6 +443,10 @@ public class AddEvent extends javax.swing.JFrame {
     private void entitledEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entitledEventActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_entitledEventActionPerformed
+
+    private void roomSelectEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roomSelectEventActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_roomSelectEventActionPerformed
 
     /**
      * @param args the command line arguments
@@ -510,7 +493,6 @@ public class AddEvent extends javax.swing.JFrame {
     private javax.swing.JTextArea descriptionEvent;
     private javax.swing.JSpinner durationEvent;
     private javax.swing.JTextField entitledEvent;
-    private javax.swing.JMenu inputEventNav;
     private javax.swing.JMenu inputParticipantNav;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -529,6 +511,5 @@ public class AddEvent extends javax.swing.JFrame {
     private javax.swing.JTextField themeEvent;
     private javax.swing.JComboBox<String> typeEvent;
     // End of variables declaration//GEN-END:variables
-
 
 }
