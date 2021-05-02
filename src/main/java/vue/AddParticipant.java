@@ -274,11 +274,11 @@ public class AddParticipant extends javax.swing.JFrame {
         firstNameL = new java.awt.Label();
         birthL = new java.awt.Label();
         obsL = new java.awt.Label();
-        countChar = new java.awt.Label();
         jScrollPane2 = new javax.swing.JScrollPane();
         obs = new javax.swing.JTextArea();
         add = new javax.swing.JButton();
         cancel = new javax.swing.JButton();
+        countChar = new java.awt.Label();
         selectEvent = new javax.swing.JLabel();
         navBar1 = new javax.swing.JMenuBar();
         accueilNav1 = new javax.swing.JMenu();
@@ -361,9 +361,6 @@ public class AddParticipant extends javax.swing.JFrame {
         obsL.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         obsL.setText("Observation");
 
-        countChar.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        countChar.setText("0/255");
-
         obs.setColumns(20);
         obs.setRows(5);
         obs.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -395,6 +392,9 @@ public class AddParticipant extends javax.swing.JFrame {
                 cancelActionPerformed(evt);
             }
         });
+
+        countChar.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        countChar.setText("0/255");
 
         selectEvent.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         selectEvent.setText("Select event(s)");
@@ -532,11 +532,13 @@ public class AddParticipant extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 711, Short.MAX_VALUE)
         );
 
         pack();

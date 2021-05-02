@@ -36,6 +36,20 @@ public class Events extends javax.swing.JFrame {
         initComponents();
     }
 
+    private void setDefaultValue() {
+        tableEvent.clearSelection();
+        entitled.setText(null);
+        theme.setText(null);
+        idEvent.setText(null);
+        dateEvent.setDate(null);
+        durationEvent.setValue(15);
+        organisateur.setText(null);
+        roomSelectEvent.setSelectedIndex(0);
+        typeEvent.setSelectedIndex(0);
+        descriptionEvent.setText(null);
+        nbCharDescEvent.setText("0/255");
+    }
+
     public final boolean setValueEventArchivement() {
         try {
             EventManagement EventManagement = new EventManagement();
@@ -117,6 +131,7 @@ public class Events extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        tableEvent.setAutoCreateRowSorter(true);
         tableEvent.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -381,6 +396,7 @@ public class Events extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
+        navBar.setBackground(new java.awt.Color(254, 254, 254));
         navBar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         navBar.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
 
@@ -432,7 +448,7 @@ public class Events extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 662, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -624,7 +640,8 @@ public class Events extends javax.swing.JFrame {
                             (Integer.valueOf(roomSelectEvent.getSelectedIndex())));
                     em.closeAll();
                     this.setValueEventArchivement();
-                    DialogTools.openMessageDialog("Event modifier avec succès !", " événement supprimer", DialogTools.INFO_MESSAGE);
+                    DialogTools.openMessageDialog("Evénement modifié avec succès !", " Info", DialogTools.INFO_MESSAGE);
+                    this.setDefaultValue();
                 }
 
             } catch (SQLException | ClassNotFoundException ex) {
@@ -694,6 +711,7 @@ public class Events extends javax.swing.JFrame {
                 em.closeAll();
                 this.setValueEventArchivement();
                 DialogTools.openMessageDialog("Event supprimer avec succès", " événement supprimer", DialogTools.INFO_MESSAGE);
+                this.setDefaultValue();
             } catch (SQLException | ClassNotFoundException ex) {
                 DialogTools.openMessageDialog(ex.getMessage(), "Erreur Participant !", DialogTools.ERROR_MESSAGE);
             }
@@ -743,21 +761,14 @@ public class Events extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel DurationL;
-    private javax.swing.JLabel DurationL1;
-    private javax.swing.JLabel OrganisationL1;
     private javax.swing.JMenu accueilNav;
     private javax.swing.JButton addBtn;
-    private javax.swing.JTextField date1;
     private com.toedter.calendar.JDateChooser dateEvent;
     private javax.swing.JLabel dateL;
-    private javax.swing.JLabel dateL1;
     private javax.swing.JLabel dateL2;
     private javax.swing.JMenu deconnexionNav;
     private javax.swing.JButton deleteEvent;
-    private javax.swing.JTextArea desc1;
-    private javax.swing.JLabel descL1;
     private javax.swing.JTextArea descriptionEvent;
-    private javax.swing.JTextField duration1;
     private javax.swing.JSpinner durationEvent;
     private javax.swing.JTextField entitled;
     private javax.swing.JTextField idEvent;
@@ -765,13 +776,9 @@ public class Events extends javax.swing.JFrame {
     private javax.swing.JMenu inputEventNav;
     private javax.swing.JMenu inputParticipantNav;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private java.awt.Label label1;
     private javax.swing.JButton modifBtn;
@@ -779,18 +786,13 @@ public class Events extends javax.swing.JFrame {
     private javax.swing.JLabel nbCharDescEvent;
     private javax.swing.JTextField organisateur;
     private javax.swing.JButton participeEvent;
-    private javax.swing.JTextField pm2;
     private javax.swing.JLabel pmL;
-    private javax.swing.JLabel pmL1;
     private javax.swing.JLabel pmL2;
     private javax.swing.JComboBox<String> roomSelectEvent;
     private javax.swing.JTable tableEvent;
-    private javax.swing.JTable tableEvent1;
     private javax.swing.JTextField theme;
     private javax.swing.JLabel themeL;
-    private javax.swing.JLabel themeL1;
     private javax.swing.JLabel themeL2;
     private javax.swing.JComboBox<String> typeEvent;
-    private javax.swing.JLabel typeL1;
     // End of variables declaration//GEN-END:variables
 }
