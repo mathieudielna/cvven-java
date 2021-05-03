@@ -68,6 +68,7 @@ public final class EventManagement extends ConnectBDD {
         super.getMyStatement().setString(2, email);
         super.execSQLWithouthResult();
     }
+    
 
     /*----------------------------------Table Salle--------------------------------------*/
     /**

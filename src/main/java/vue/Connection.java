@@ -174,7 +174,7 @@ public class Connection extends javax.swing.JFrame {
                 String pswd = new String(c);
                 if(gestionEventModele.countUserLogin(login.getText(), pswd).getInt("nbUser") == 1){
                     Session.initSession(gestionEventModele.selectIdUser(login.getText(), pswd).getInt("id_user"));
-                    System.out.println(Session.getIdUser());
+                    System.out.println("Votre ID de session est le :" + Session.getIdUser());
                     Home fen = new Home();
                     fen.setVisible(true);
                     this.dispose();

@@ -5,14 +5,19 @@
  */
 package vue;
 
+import com.toedter.calendar.JDateChooser;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import modele.DialogTools;
 import modele.Session;
-import modele.CSVFileRead;
 import modele.EventManagement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 
@@ -178,7 +183,6 @@ public class AddParticipant extends javax.swing.JFrame {
 
                     for (String sE : selectEvents.getSelectedValuesList()) {
                         if (!sE.equalsIgnoreCase("Aucun évènement !")) {
-                            //System.out.println(sE);
                             em.insertTakePart(sE, email.getText());
                         }
                     }
@@ -193,7 +197,7 @@ public class AddParticipant extends javax.swing.JFrame {
         }
     }
 
-    public void insertParticipantCSV() {
+    public void insertParticipantCSV() throws FileNotFoundException {
         if (selectEvents.getSelectedValuesList().isEmpty()) {
             if (selectEvents.getSelectedValuesList().isEmpty()) {
                 DialogTools.openMessageDialog("Vous n'avez pas sélectionner d'évènement !", "Erreur", DialogTools.ERROR_MESSAGE);
@@ -209,6 +213,7 @@ public class AddParticipant extends javax.swing.JFrame {
                 DialogTools.openMessageDialog("Le participant ne peut pas être inscrit à aucun évènement !", "Erreur !", DialogTools.ERROR_MESSAGE);
             } else {
                 try {
+                    //Set UP BDD
                     EventManagement EventManagement = new EventManagement();
                     EventManagement.setDb();
 
@@ -217,28 +222,48 @@ public class AddParticipant extends javax.swing.JFrame {
                             break;
                         }
                     }
-                    if (ChooseFileCSV.getSelectedFile() != null) {
-                        CSVFileRead csvFile = new CSVFileRead(ChooseFileCSV.getSelectedFile());
-                        if (csvFile.readControlFile() != null) {
-                            for (String[] uneLigne : csvFile.getLesLignes()) {
-                                EventManagement.insertParticipant(uneLigne[0], uneLigne[1], uneLigne[2], uneLigne[3], uneLigne[4], uneLigne[5]);
-                                EventManagement.closeMyStatement();
 
-                                for (String sE : selectEvents.getSelectedValuesList()) {
-                                    if (!sE.equalsIgnoreCase("Aucun évènement !")) {
-                                        //System.out.println(selectEvent + " / " + uneLigne[3]);
-                                        EventManagement.insertTakePart(sE, uneLigne[3]);
-                                        EventManagement.closeMyStatement();
-                                    }
-                                }
+                    //verify que le fichier CSV est selectionner
+                    if (ChooseFileCSV.getSelectedFile() != null) {
+                        String line = "";
+                        String nom = "";
+                        String email = "";
+                        
+                        String select = selectEvents.getSelectedValue();
+                        EventManagement em = new EventManagement();
+                        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+                        em.setDb();
+                        
+                        try {
+                            BufferedReader br = new BufferedReader(new FileReader(ChooseFileCSV.getSelectedFile()));
+                            while ((line = br.readLine()) != null) {
+                                String[] values = line.split(",");
+                                //INSERTION DU PARTICIPANT 
+                                System.out.println(values[1] + " - " + values[0] + " - " + values[5] + " - " + values[2] + " - " + values[3] + " - " + values[4]);
+                                em.insertParticipant(values[1], values[0], values[5], values[2], values[3], values[4]);
+                                em.closeMyStatement();
+                                email = values[5];
+                                em.insertTakePart(select, email);
+                                em.closeMyStatement();
+                               
+
                             }
-                            EventManagement.closeAll();
-                            DialogTools.openMessageDialog("L'ajout de participant est terminée !", "Ajout Terminée");
-                            this.setValueParticipant();
-                        } else {
-                            DialogTools.openMessageDialog("Vous n'avez pas sélectionné de fichier !", "Erreur Select Fichier !", DialogTools.WARNING_MESSAGE);
+
+                            //INSERTION PARTICIPANT TERMINÉ 
+                        } catch (Exception e) {
+                            DialogTools.openMessageDialog(e.getMessage(), "Erreur Participant !", DialogTools.ERROR_MESSAGE);
+
                         }
+
+                        //Erreur redcontrol == null
+                        EventManagement.closeAll();
+                        DialogTools.openMessageDialog("L'ajout de participant est terminée !", "Ajout Terminée");
+                        this.setValueParticipant();
+                    } 
+                    else {
+                        DialogTools.openMessageDialog("Vous n'avez pas sélectionné de fichier !", "Erreur Select Fichier !", DialogTools.WARNING_MESSAGE);
                     }
+
                 } catch (SQLException | ClassNotFoundException ex) {
                     DialogTools.openMessageDialog(ex.getMessage(), "Erreur Participant !", DialogTools.ERROR_MESSAGE);
                 }
@@ -599,21 +624,29 @@ public class AddParticipant extends javax.swing.JFrame {
 
     private void insertCSVMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_insertCSVMouseClicked
         this.showField(false);
-        this.insertParticipantCSV();
+        try {
+            this.insertParticipantCSV();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(AddParticipant.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_insertCSVMouseClicked
 
     private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
         if (insertEventText.isSelected()) {
             this.insertParticipantText();
         } else if (insertCSV.isSelected()) {
-            this.insertParticipantCSV();
+            try {
+                this.insertParticipantCSV();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(AddParticipant.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_addMouseClicked
 
     private void obsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_obsKeyPressed
         countChar.setText(obs.getText().length() + "/255");
     }//GEN-LAST:event_obsKeyPressed
-;
+    ;
     private void obsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_obsKeyReleased
         countChar.setText(obs.getText().length() + "/255");
     }//GEN-LAST:event_obsKeyReleased
@@ -627,7 +660,7 @@ public class AddParticipant extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelMouseClicked
 
     private void insertCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertCSVActionPerformed
-       //empty
+        //empty
     }//GEN-LAST:event_insertCSVActionPerformed
 
     /**
