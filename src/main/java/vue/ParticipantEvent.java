@@ -5,6 +5,8 @@
  */
 package vue;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
@@ -22,21 +24,24 @@ public class ParticipantEvent extends javax.swing.JFrame {
      */
     public ParticipantEvent() {
         initComponents();
+        Toolkit toolkit = getToolkit();
+        Dimension size = toolkit.getScreenSize();
+        setLocation(size.width / 2 - getWidth() / 2, size.height / 2 - getHeight() / 2);
     }
 
     public final boolean setValueEventParticipant(int id) {
         try {
             EventManagement EventManagement = new EventManagement();
             EventManagement.setDb();
-            
+
             //fonction à modfiier ici 
             ResultSet rs = EventManagement.selectParticipantEventById(id);
-           
+
             DefaultTableModel participantE = (DefaultTableModel) participantEvent.getModel();
             participantE.setRowCount(0);
 
             if (rs != null) {
-               
+
                 participantE.addRow(new Object[]{rs.getString("id_participant"), rs.getString("firstname"), rs.getString("lastname"),
                     rs.getString("birthd"), rs.getString("organisation"),
                     rs.getString("observation"), rs.getString("email"),

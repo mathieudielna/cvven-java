@@ -6,6 +6,8 @@
 package vue;
 
 import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.formatDate;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -34,6 +36,10 @@ public class Events extends javax.swing.JFrame {
      */
     public Events() {
         initComponents();
+        Toolkit toolkit = getToolkit();
+        Dimension size = toolkit.getScreenSize();
+        setLocation(size.width/2 - getWidth()/2, size.height/2 - getHeight()/2);
+        
     }
 
     private void setDefaultValue() {

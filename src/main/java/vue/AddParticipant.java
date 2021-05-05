@@ -6,6 +6,8 @@
 package vue;
 
 import com.toedter.calendar.JDateChooser;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -35,6 +37,9 @@ public class AddParticipant extends javax.swing.JFrame {
      */
     public AddParticipant() {
         initComponents();
+        Toolkit toolkit = getToolkit();
+        Dimension size = toolkit.getScreenSize();
+        setLocation(size.width / 2 - getWidth() / 2, size.height / 2 - getHeight() / 2);
     }
 
     /**
@@ -228,12 +233,12 @@ public class AddParticipant extends javax.swing.JFrame {
                         String line = "";
                         String nom = "";
                         String email = "";
-                        
+
                         String select = selectEvents.getSelectedValue();
                         EventManagement em = new EventManagement();
                         SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
                         em.setDb();
-                        
+
                         try {
                             BufferedReader br = new BufferedReader(new FileReader(ChooseFileCSV.getSelectedFile()));
                             while ((line = br.readLine()) != null) {
@@ -241,11 +246,12 @@ public class AddParticipant extends javax.swing.JFrame {
                                 //INSERTION DU PARTICIPANT 
                                 System.out.println(values[1] + " - " + values[0] + " - " + values[5] + " - " + values[2] + " - " + values[3] + " - " + values[4]);
                                 em.insertParticipant(values[1], values[0], values[5], values[2], values[3], values[4]);
+                                //Pb execution de la requête
                                 em.closeMyStatement();
                                 email = values[5];
+                                //Pb execution de la requête
                                 em.insertTakePart(select, email);
                                 em.closeMyStatement();
-                               
 
                             }
 
@@ -259,8 +265,7 @@ public class AddParticipant extends javax.swing.JFrame {
                         EventManagement.closeAll();
                         DialogTools.openMessageDialog("L'ajout de participant est terminée !", "Ajout Terminée");
                         this.setValueParticipant();
-                    } 
-                    else {
+                    } else {
                         DialogTools.openMessageDialog("Vous n'avez pas sélectionné de fichier !", "Erreur Select Fichier !", DialogTools.WARNING_MESSAGE);
                     }
 

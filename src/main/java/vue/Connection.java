@@ -5,6 +5,8 @@
  */
 package vue;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.sql.SQLException;
 import modele.DialogTools;
 import modele.EventManagement;
@@ -21,6 +23,9 @@ public class Connection extends javax.swing.JFrame {
      */
     public Connection() {
         initComponents();
+        Toolkit toolkit = getToolkit();
+        Dimension size = toolkit.getScreenSize();
+        setLocation(size.width / 2 - getWidth() / 2, size.height / 2 - getHeight() / 2);
     }
 
     /**
@@ -160,25 +165,23 @@ public class Connection extends javax.swing.JFrame {
     }//GEN-LAST:event_button1ActionPerformed
 
     private void button1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_button1MouseClicked
-        if(login.getText().isBlank()){
+        if (login.getText().isBlank()) {
             DialogTools.openMessageDialog("Veuillez indiquez un nom d'utilisateur", "Erreur", DialogTools.ERROR_MESSAGE);
-        }
-        else if(password.getPassword().length == 0){
+        } else if (password.getPassword().length == 0) {
             DialogTools.openMessageDialog("Veuillez indiquez un mot de passe", "Erreur", DialogTools.ERROR_MESSAGE);
-        }
-        else{
+        } else {
             try {
                 EventManagement gestionEventModele = new EventManagement();
                 gestionEventModele.setDb();
                 char[] c = password.getPassword();
                 String pswd = new String(c);
-                if(gestionEventModele.countUserLogin(login.getText(), pswd).getInt("nbUser") == 1){
+                if (gestionEventModele.countUserLogin(login.getText(), pswd).getInt("nbUser") == 1) {
                     Session.initSession(gestionEventModele.selectIdUser(login.getText(), pswd).getInt("id_user"));
                     System.out.println("Votre ID de session est le :" + Session.getIdUser());
                     Home fen = new Home();
                     fen.setVisible(true);
                     this.dispose();
-                }else{
+                } else {
                     DialogTools.openMessageDialog("Vos identifiants sont incorrects", "Identifiant Invalide !", DialogTools.WARNING_MESSAGE);
                 }
             } catch (SQLException | ClassNotFoundException ex) {

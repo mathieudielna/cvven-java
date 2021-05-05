@@ -5,6 +5,8 @@
  */
 package vue;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -24,6 +26,9 @@ public class AddEvent extends javax.swing.JFrame {
      */
     public AddEvent() {
         initComponents();
+        Toolkit toolkit = getToolkit();
+        Dimension size = toolkit.getScreenSize();
+        setLocation(size.width / 2 - getWidth() / 2, size.height / 2 - getHeight() / 2);
     }
 
     private void setDefaultValue() {
